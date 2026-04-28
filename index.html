@@ -7,6 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Fitness App">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><text x='50%' y='50%' font-size='90' text-anchor='middle' dy='.3em'>💪</text></svg>">
     <title>Fitness App</title>
     <style>
@@ -181,32 +184,158 @@
             width: max-content;
         }
 
+        /* Увеличены на 15% (было 65px -> ~75px) */
         .achievement {
             background: var(--card-bg);
-            border-radius: 12px;
-            padding: 9px 10px;
+            border-radius: 14px;
+            padding: 10px 11px;
             text-align: center;
             box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-            width: 65px;
-            flex: 0 0 65px;
+            width: 75px;
+            flex: 0 0 75px;
             transition: all 0.3s;
+            position: relative;
         }
 
         .achievement.locked {
             opacity: 0.35;
             background: var(--secondary-bg);
+            cursor: default;
         }
 
         .achievement.unlocked {
             background: linear-gradient(135deg, #FFD700 0%, #FFC700 100%);
             box-shadow: 0 4px 10px rgba(255, 215, 0, 0.35);
             transform: scale(1.05);
+            cursor: pointer;
         }
 
-        .achievement-icon { font-size: 18px; margin-bottom: 2px; display: block; }
-        .achievement-label { font-size: 11px; font-weight: 700; color: var(--text-dark); display: block; text-align: center; }
-        .achievement-target { font-size: 9px; color: var(--text-light); margin-top: 2px; display: block; text-align: center; word-break: keep-all; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .achievement-progress { font-size: 9px; color: var(--text-light); margin-top: 1px; display: block; text-align: center; }
+        .achievement.unlocked:active {
+            transform: scale(0.98);
+        }
+
+        .achievement-icon { font-size: 20px; margin-bottom: 2px; display: block; }
+        .achievement-label { font-size: 12px; font-weight: 700; color: var(--text-dark); display: block; text-align: center; }
+        .achievement-target { font-size: 10px; color: var(--text-light); margin-top: 2px; display: block; text-align: center; word-break: keep-all; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .achievement-progress { font-size: 10px; color: var(--text-light); margin-top: 1px; display: block; text-align: center; }
+
+        /* ===== ACHIEVEMENT MODAL ===== */
+        .achievement-modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 8000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .achievement-modal-overlay.show {
+            pointer-events: all;
+            opacity: 1;
+        }
+
+        /* Blur backdrop */
+        .achievement-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .achievement-modal-overlay.show .achievement-modal-backdrop {
+            opacity: 1;
+        }
+
+        /* Modal card */
+        .achievement-modal-card {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(145deg, #FFF9E6 0%, #FFE066 40%, #FFD700 100%);
+            border-radius: 28px;
+            padding: 36px 28px 32px;
+            width: min(85vw, 320px);
+            text-align: center;
+            box-shadow:
+                0 30px 80px rgba(0,0,0,0.3),
+                0 0 0 2px rgba(255,215,0,0.6),
+                inset 0 1px 0 rgba(255,255,255,0.8);
+            transform: scale(0.6) translateY(30px);
+            opacity: 0;
+            transition:
+                transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.3s ease;
+        }
+
+        .achievement-modal-overlay.show .achievement-modal-card {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .achievement-modal-overlay.closing .achievement-modal-card {
+            transform: scale(0.6) translateY(30px);
+            opacity: 0;
+        }
+
+        .achievement-modal-overlay.closing .achievement-modal-backdrop {
+            opacity: 0;
+        }
+
+        .achievement-modal-overlay.closing {
+            pointer-events: none;
+        }
+
+        .modal-icon {
+            font-size: 64px;
+            display: block;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+            animation: floatIcon 2.5s ease-in-out infinite;
+        }
+
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .modal-title {
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #8B6914;
+            margin-bottom: 6px;
+        }
+
+        .modal-headline {
+            font-size: 20px;
+            font-weight: 800;
+            color: #3D2A00;
+            margin-bottom: 18px;
+            line-height: 1.2;
+        }
+
+        .modal-divider {
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #B8956A, #FFD700);
+            border-radius: 2px;
+            margin: 0 auto 18px;
+        }
+
+        .modal-message {
+            font-family: 'Caveat', cursive;
+            font-size: 22px;
+            font-weight: 600;
+            color: #3D2A00;
+            line-height: 1.45;
+            text-align: center;
+        }
 
         /* ===== WORKOUT SCREEN ===== */
         .progress-fixed-top {
@@ -732,18 +861,6 @@
             to { transform: scale(1.04); }
         }
 
-        .firework {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            animation: fireworkBurst 1s ease-out forwards;
-        }
-
-        @keyframes fireworkBurst {
-            0%   { transform: translate(0,0) scale(1); opacity: 1; }
-            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
-        }
         .unlock-notification {
             position: fixed;
             top: 50%;
@@ -795,7 +912,6 @@
                 </div>
             </div>
 
-            <!-- ACHIEVEMENTS — внизу главной, горизонтальный скролл -->
             <div class="achievements-section">
                 <div class="achievements-title">🏆 Награды</div>
                 <div class="achievements-scroll-wrapper">
@@ -898,6 +1014,18 @@
     </div>
 </div>
 
+<!-- ACHIEVEMENT MODAL -->
+<div class="achievement-modal-overlay" id="achievementModal" onclick="handleModalOverlayClick(event)">
+    <div class="achievement-modal-backdrop"></div>
+    <div class="achievement-modal-card" id="achievementModalCard">
+        <span class="modal-icon" id="modalIcon">🏆</span>
+        <div class="modal-title" id="modalTitle">Достижение</div>
+        <div class="modal-headline" id="modalHeadline">10 тренировок пройдено!</div>
+        <div class="modal-divider"></div>
+        <div class="modal-message" id="modalMessage"></div>
+    </div>
+</div>
+
 <div class="celebration-overlay" id="celebrationOverlay">
     <canvas id="fireworksCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
     <div class="celebration-text">🎉 Лера, ты это сделала! 🎉</div>
@@ -919,6 +1047,30 @@
 </div>
 
 <script>
+    // ===== ACHIEVEMENT MESSAGES =====
+    const achievementMessages = {
+        5:   "Лера, начало положено! Кроссовки тебя уже боятся.",
+        10:  "10 тренировок позади! Лера, ты официально в банде «не пропускаю понедельники».",
+        15:  "Лера, ты просто космос! Еще чуть-чуть, и гравитация на тебя перестанет действовать.",
+        20:  "Вау, Лера, ты красотка! Зеркала в зале скоро начнут тебе подмигивать.",
+        25:  "Четверть пути пройдена! Лера, ты явно ешь сталь на завтрак.",
+        30:  "30 раз! Лера, признайся, ты тайно тренируешься, пока все спят?",
+        35:  "Лера, твоя энергия мощнее, чем двойной эспрессо!",
+        40:  "Гляньте на неё! Лера, ты скоро станешь причиной очередей у гантелей.",
+        45:  "Лера, еще немного, и ты сможешь поднимать свои проблемы одной левой!",
+        50:  "Экватор! Лера, ты наполовину супергерой. Где твой плащ?",
+        55:  "Лера, ты выглядишь так, будто рекламируешь здоровый образ жизни 24/7.",
+        60:  "60 тренировок! Лера, пора выписывать тебе штраф за чрезмерную крутость.",
+        65:  "Лера, если бы лень тебя увидела, она бы убежала в слезах.",
+        70:  "Твоё упорство пугает диваны! Лера, ты машина!",
+        75:  "75! Лера, ты уже легенда. Скоро в твою честь назовут планку.",
+        80:  "Лера, ты просто огонь! Смотри не расплавь тренажеры.",
+        85:  "Еще немного, Лера! Ты официально сильнее своих самых убедительных отговорок.",
+        90:  "90 тренировок! Лера, ты вообще человек? Или фитнес-робот из будущего?",
+        95:  "Почти сотня! Лера, подготовь корону, она тебе скоро понадобится.",
+        100: "100 тренировок! Лера, ты это сделала! Теперь ты официально можешь учить Чака Норриса отжиматься!"
+    };
+
     const data = {
         1: {
             name: "Ягодицы + Ноги",
@@ -1027,6 +1179,7 @@
     let currentDay = 1;
     let currentMonth = new Date().getMonth();
     let currentYear = new Date().getFullYear();
+    let modalOpen = false;
 
     function init() {
         updateUI();
@@ -1097,7 +1250,7 @@
         const warmupDone = localStorage.getItem(warmupId);
         const warmupBlock = document.getElementById('warmupBlock');
         warmupDone ? warmupBlock.classList.add('completed') : warmupBlock.classList.remove('completed');
-        totalTasks++; // Разминка тоже считается в прогрессе
+        totalTasks++;
 
         data[day].groups.forEach((group, gIdx) => {
             if (group.type === 'cardio') {
@@ -1194,11 +1347,9 @@
         updateProgress();
     }
 
-    // Считаем упражнения + разминку
     function updateProgress() {
         const container = document.getElementById('workout-content');
         let completed = container.querySelectorAll('.completed').length;
-        // Добавляем разминку если она выполнена
         if (document.getElementById('warmupBlock').classList.contains('completed')) completed++;
         const percent = totalTasks > 0 ? Math.round((completed / totalTasks) * 100) : 0;
         document.getElementById('p-bar').style.width = percent + '%';
@@ -1219,11 +1370,9 @@
     function resetProgress() {
         if (confirm("Очистить прогресс и начать новую тренировку?")) {
             const day = currentDay;
-            // Очищаем упражнения
             Object.keys(localStorage).forEach(key => {
                 if (key.includes(`d${day}-`)) localStorage.removeItem(key);
             });
-            // Очищаем разминку тоже
             localStorage.removeItem(`warmup-d${day}`);
             loadDay(day);
             updateDayButtons();
@@ -1231,8 +1380,7 @@
     }
 
     function getDayProgress(day) {
-        // Считаем процент выполнения конкретного дня
-        let tasks = 1; // разминка
+        let tasks = 1;
         let done = localStorage.getItem(`warmup-d${day}`) ? 1 : 0;
         data[day].groups.forEach((group, gIdx) => {
             if (group.type === 'cardio') {
@@ -1260,7 +1408,6 @@
                 btn.style.color = 'white';
                 btn.style.boxShadow = '0 4px 12px rgba(52,199,89,0.4)';
             } else {
-                // Восстанавливаем стиль — активный или обычный
                 if (d === currentDay) {
                     btn.style.background = 'var(--button-brown)';
                     btn.style.color = 'white';
@@ -1274,7 +1421,6 @@
             }
         });
 
-        // Все 3 дня завершены — предлагаем сбросить цикл
         if (allComplete) {
             setTimeout(() => {
                 if (confirm("🎉 Все тренировки цикла завершены!\n\nСбросить прогресс и начать заново?")) {
@@ -1303,6 +1449,46 @@
 
         checkAchievements(totalCount);
     }
+
+    // ===== ACHIEVEMENT MODAL =====
+    function openAchievementModal(target) {
+        const a = achievements.find(a => parseInt(a.label) === target);
+        if (!a) return;
+
+        document.getElementById('modalIcon').innerText = a.icon;
+        document.getElementById('modalTitle').innerText = `Достижение: ${target} тренировок пройдено!`;
+        document.getElementById('modalHeadline').innerText = `${target} тренировок`;
+        document.getElementById('modalMessage').innerText = achievementMessages[target] || `Лера, ты сделала ${target} тренировок!`;
+
+        const overlay = document.getElementById('achievementModal');
+        overlay.classList.remove('closing');
+        overlay.classList.add('show');
+        modalOpen = true;
+    }
+
+    function closeAchievementModal() {
+        if (!modalOpen) return;
+        const overlay = document.getElementById('achievementModal');
+        overlay.classList.add('closing');
+        setTimeout(() => {
+            overlay.classList.remove('show', 'closing');
+            modalOpen = false;
+        }, 350);
+    }
+
+    function handleModalOverlayClick(e) {
+        // Close if clicking on backdrop or the overlay itself (not the card)
+        if (e.target === document.getElementById('achievementModal') ||
+            e.target === document.querySelector('.achievement-modal-backdrop')) {
+            closeAchievementModal();
+        }
+    }
+
+    // Also close on card click (tap on card itself closes it)
+    document.getElementById('achievementModalCard').addEventListener('click', function(e) {
+        e.stopPropagation();
+        closeAchievementModal();
+    });
 
     // CALENDAR
     function renderCalendar() {
@@ -1334,7 +1520,6 @@
         const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
         const isCompleted = workouts[dateStr];
 
-        // Форматируем дату красиво
         const [y, m, d] = dateStr.split('-');
         const prettyDate = new Date(y, m - 1, d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
 
@@ -1345,7 +1530,6 @@
         const btns = document.getElementById('calPopupBtns');
 
         if (isCompleted) {
-            // Уже отмечена — предлагаем удалить
             icon.innerText = '🗑️';
             title.innerText = 'Удалить тренировку?';
             dateEl.innerText = prettyDate;
@@ -1353,7 +1537,6 @@
                 <button class="cal-popup-btn delete" onclick="calConfirmDelete('${dateStr}')">Удалить</button>
                 <button class="cal-popup-btn cancel" onclick="calClosePopup()">Назад</button>`;
         } else {
-            // Пустая — предлагаем добавить
             icon.innerText = '💪';
             title.innerText = 'Записать тренировку?';
             dateEl.innerText = prettyDate;
@@ -1387,7 +1570,6 @@
         document.getElementById('calPopupOverlay').classList.remove('show');
     }
 
-    // Закрыть попап по клику на фон
     document.getElementById('calPopupOverlay').addEventListener('click', function(e) {
         if (e.target === this) calClosePopup();
     });
@@ -1532,11 +1714,12 @@
         const count = Object.keys(workouts).length;
 
         const html = achievements.map(a => {
-            const target = parseInt(a.target);
+            const target = parseInt(a.label);
             const unlocked = count >= target;
             const progress = Math.min(count, target);
+            const clickAttr = unlocked ? `onclick="openAchievementModal(${target})"` : '';
             return `
-                <div class="achievement ${unlocked ? 'unlocked' : 'locked'}">
+                <div class="achievement ${unlocked ? 'unlocked' : 'locked'}" ${clickAttr}>
                     <div class="achievement-icon">${a.icon}</div>
                     <div class="achievement-label">${a.label}</div>
                     <div class="achievement-target">${a.target}</div>
@@ -1576,7 +1759,6 @@
         const canvas = document.getElementById('fireworksCanvas');
         overlay.classList.add('show');
 
-        // Resize canvas
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         const ctx = canvas.getContext('2d');
@@ -1600,7 +1782,6 @@
             }
         }
 
-        // Launch multiple bursts
         const positions = [
             [canvas.width * 0.25, canvas.height * 0.3],
             [canvas.width * 0.75, canvas.height * 0.25],
@@ -1625,7 +1806,7 @@
                 const p = particles[i];
                 p.x += p.vx;
                 p.y += p.vy;
-                p.vy += 0.12; // gravity
+                p.vy += 0.12;
                 p.life -= 0.018;
                 if (p.life <= 0) { particles.splice(i, 1); continue; }
                 ctx.globalAlpha = p.life;
