@@ -3,31 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Fitness App">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><text x='50%' y='50%' font-size='90' text-anchor='middle' dy='.3em'>💪</text></svg>">
     <title>Fitness App</title>
     <style>
         :root {
-            --ios-bg: #f2f2f7;
-            --ios-card: #ffffff;
-            --ios-blue: #007aff;
-            --ios-green: #34c759;
-            --ios-red: #ff3b30;
-            --ios-orange: #ff9500;
-            --ios-purple: #af52de;
-            --ios-text: #000000;
-            --group-border: #d1d1d6;
+            --primary-bg: #E8D4C4;
+            --secondary-bg: #F5E6DC;
+            --card-bg: #FFFFFF;
+            --button-brown: #B8956A;
+            --button-light: #D4AF9F;
+            --accent-green: #34c759;
+            --accent-red: #ff3b30;
+            --text-dark: #3D3D3D;
+            --text-light: #8B8B8B;
+            --border-color: #E0D0C8;
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             font-family: -apple-system, system-ui, sans-serif;
-            background-color: var(--ios-bg);
-            color: var(--ios-text);
+            background: linear-gradient(135deg, #E8D4C4 0%, #D4C0B0 100%);
+            color: var(--text-dark);
             margin: 0;
             padding: 0;
             -webkit-tap-highlight-color: transparent;
@@ -39,7 +40,7 @@
             height: 100vh;
         }
 
-        .content {
+        .screens {
             flex: 1;
             overflow-y: auto;
             padding-bottom: 70px;
@@ -50,12 +51,13 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: var(--ios-card);
+            background: var(--card-bg);
             display: flex;
             justify-content: space-around;
-            border-top: 1px solid var(--group-border);
+            border-top: 1px solid var(--border-color);
             z-index: 999;
             padding: 8px 0 20px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
         }
 
         .nav-item {
@@ -68,13 +70,11 @@
             border: none;
             background: none;
             font-size: 24px;
-            color: #8e8e93;
+            color: #A0A0A0;
             transition: color 0.3s;
         }
 
-        .nav-item.active {
-            color: var(--ios-blue);
-        }
+        .nav-item.active { color: var(--button-brown); }
 
         .nav-label {
             font-size: 11px;
@@ -82,23 +82,21 @@
         }
 
         /* ===== HOME PAGE ===== */
-        .home-screen {
-            padding: 20px;
-        }
+        .home-screen { padding: 20px; }
 
         .profile-box {
             width: 100%;
-            height: 300px;
-            background: var(--ios-card);
-            border-radius: 20px;
-            margin-bottom: 30px;
+            height: 240px;
+            background: var(--card-bg);
+            border-radius: 30px;
+            margin-bottom: 20px;
             overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 80px;
-            color: #8e8e93;
+            color: #C0C0C0;
             position: relative;
         }
 
@@ -112,7 +110,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background: var(--ios-blue);
+            background: var(--button-brown);
             color: white;
             border: none;
             border-radius: 50%;
@@ -120,64 +118,118 @@
             height: 50px;
             font-size: 24px;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(184, 149, 106, 0.4);
         }
 
-        #profileInput {
-            display: none;
-        }
+        #profileInput { display: none; }
 
         .home-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .stat-card {
-            background: var(--ios-card);
-            border-radius: 16px;
+            background: var(--card-bg);
+            border-radius: 20px;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .stat-value {
             font-size: 28px;
             font-weight: 700;
-            color: var(--ios-blue);
+            color: var(--button-brown);
             margin-bottom: 5px;
         }
 
         .stat-label {
             font-size: 13px;
-            color: #8e8e93;
+            color: var(--text-light);
             text-transform: uppercase;
             font-weight: 600;
         }
+
+        /* ===== ACHIEVEMENTS — горизонтальный скролл ===== */
+        .achievements-section {
+            padding: 0 0 20px 0;
+        }
+
+        .achievements-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .achievements-scroll-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            margin: 0 -20px;
+            padding: 4px 20px 8px;
+        }
+
+        .achievements-scroll-wrapper::-webkit-scrollbar { display: none; }
+
+        .achievements-grid {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 8px;
+            width: max-content;
+        }
+
+        .achievement {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 8px 10px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            width: 62px;
+            flex: 0 0 auto;
+            transition: all 0.3s;
+        }
+
+        .achievement.locked {
+            opacity: 0.35;
+            background: var(--secondary-bg);
+        }
+
+        .achievement.unlocked {
+            background: linear-gradient(135deg, #FFD700 0%, #FFC700 100%);
+            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.35);
+            transform: scale(1.05);
+        }
+
+        .achievement-icon { font-size: 18px; margin-bottom: 2px; }
+        .achievement-label { font-size: 11px; font-weight: 700; color: var(--text-dark); }
+        .achievement-target { font-size: 9px; color: var(--text-light); margin-top: 2px; }
+        .achievement-progress { font-size: 9px; color: var(--text-light); margin-top: 1px; }
 
         /* ===== WORKOUT SCREEN ===== */
         .progress-fixed-top {
             position: sticky;
             top: 0;
-            background: var(--ios-card);
+            background: var(--card-bg);
             padding: 12px 15px 8px;
             z-index: 100;
-            box-shadow: 0 1px 10px rgba(0,0,0,0.1);
-            border-bottom: 1px solid var(--group-border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-bottom: 1px solid var(--border-color);
         }
 
         #progress-text {
             font-size: 14px;
             font-weight: 800;
             margin-bottom: 5px;
-            color: var(--ios-text);
+            color: var(--text-dark);
         }
 
         .progress-container {
             width: 100%;
             height: 14px;
-            background: #e5e5ea;
+            background: #E0D0C8;
             border-radius: 7px;
             overflow: hidden;
         }
@@ -185,93 +237,113 @@
         .progress-bar {
             height: 100%;
             width: 0%;
-            background: var(--ios-green);
+            background: var(--accent-green);
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .warmup-btn {
-            width: 100%;
+        .warmup-block {
+            background: var(--card-bg);
             padding: 16px;
-            background: var(--ios-orange);
-            color: white;
-            border: none;
-            border-radius: 14px;
-            font-weight: 700;
-            font-size: 16px;
+            border-radius: 20px;
             margin: 15px 0;
-            cursor: pointer;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
         }
 
-        .warmup-btn.completed {
-            background: var(--ios-green);
-            opacity: 0.7;
+        .warmup-block.completed {
+            background: #E8F5E9;
+            border: 2px solid var(--accent-green);
         }
+
+        .warmup-title {
+            font-weight: 700;
+            font-size: 16px;
+            width: 100%;
+            text-align: center;
+            color: var(--text-dark);
+        }
+
+        .warmup-btn {
+            width: auto;
+            padding: 12px 32px;
+            background: var(--button-brown);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+        }
+
+        .warmup-btn:active { background: #A07850; transform: scale(0.98); }
 
         .day-selector {
             display: flex;
             gap: 10px;
             margin: 15px 15px;
-            padding: 0;
         }
 
         .day-btn {
             flex: 1;
             padding: 12px;
-            border-radius: 12px;
+            border-radius: 16px;
             border: none;
-            background: var(--ios-card);
-            color: var(--ios-blue);
+            background: var(--card-bg);
+            color: var(--button-brown);
             font-weight: 600;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
             cursor: pointer;
             transition: all 0.3s;
         }
 
         .day-btn.active {
-            background: var(--ios-blue);
+            background: var(--button-brown);
             color: white;
+            box-shadow: 0 4px 12px rgba(184, 149, 106, 0.4);
         }
 
-        .workout-content {
-            padding: 0 15px 20px;
-        }
+        .workout-content { padding: 0 15px 20px; }
 
         .workout-content h1 {
             font-size: 24px;
             font-weight: 700;
             margin: 20px 0 15px 0;
+            color: var(--text-dark);
         }
 
         .muscle-group {
-            border: 2px solid var(--group-border);
+            border: 2px solid var(--border-color);
             border-radius: 20px;
             padding: 12px;
             margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.5);
         }
 
         .group-title {
-            font-size: 13px;
+            font-size: 12px;
             text-transform: uppercase;
-            color: #8e8e93;
-            margin: 0 0 10px 10px;
+            color: var(--text-light);
+            margin: 0 0 12px 10px;
             font-weight: 800;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.6px;
         }
 
         .exercise-card {
-            background: var(--ios-card);
-            border-radius: 14px;
-            margin-bottom: 10px;
+            background: var(--card-bg);
+            border-radius: 18px;
+            margin-bottom: 12px;
             overflow: hidden;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
         }
 
         .exercise-card.completed {
-            background: #e2f9e9;
-            border: 1px solid var(--ios-green);
+            background: #E8F5E9;
+            border: 2px solid var(--accent-green);
         }
 
         .header {
@@ -280,46 +352,37 @@
             justify-content: space-between;
             align-items: center;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
             user-select: none;
+            color: var(--text-dark);
         }
 
         .toggle-icon {
-            color: var(--ios-blue);
+            color: var(--button-brown);
             font-size: 20px;
             transition: transform 0.3s ease;
         }
 
-        .toggle-icon.open {
-            transform: rotate(45deg);
-        }
+        .toggle-icon.open { transform: rotate(45deg); }
 
         .content {
             display: none;
             padding: 0 16px 16px;
-            border-top: 1px solid #f2f2f7;
+            border-top: 1px solid var(--border-color);
             animation: slideDown 0.3s ease;
         }
 
-        .content.show {
-            display: block;
-        }
+        .content.show { display: block; }
 
         @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .exercise-img {
             width: 100%;
-            border-radius: 10px;
+            border-radius: 14px;
             margin: 12px 0;
             display: block;
             max-height: 200px;
@@ -327,13 +390,13 @@
         }
 
         .instr {
-            font-size: 14px;
+            font-size: 13px;
             line-height: 1.5;
-            color: #3a3a3c;
+            color: var(--text-dark);
             margin-bottom: 15px;
-            background: #f8f8f8;
-            padding: 10px;
-            border-radius: 8px;
+            background: var(--secondary-bg);
+            padding: 12px;
+            border-radius: 10px;
         }
 
         .inputs {
@@ -342,49 +405,47 @@
             margin-bottom: 12px;
         }
 
-        .inputs div {
-            flex: 1;
-        }
+        .inputs div { flex: 1; }
 
         .inputs small {
             display: block;
             margin-bottom: 4px;
-            color: #8e8e93;
+            color: var(--text-light);
             font-weight: 500;
         }
 
         input {
             width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #d1d1d6;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
             font-size: 16px;
             box-sizing: border-box;
+            background: var(--secondary-bg);
+            color: var(--text-dark);
         }
 
         .btn-done {
             width: 100%;
             padding: 14px;
-            background: var(--ios-blue);
+            background: var(--button-brown);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background 0.3s, transform 0.1s;
         }
 
-        .btn-done:active {
-            background: #0051d5;
-        }
+        .btn-done:active { background: #A07850; transform: scale(0.98); }
 
         .cardio-block {
-            background: var(--ios-card);
-            padding: 20px;
-            border-radius: 16px;
+            background: var(--card-bg);
+            padding: 18px;
+            border-radius: 20px;
             margin-bottom: 15px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -392,30 +453,28 @@
         }
 
         .cardio-block.completed {
-            background: #e2f9e9;
-            border: 1px solid var(--ios-green);
+            background: #E8F5E9;
+            border: 2px solid var(--accent-green);
         }
 
-        .reset-container {
-            text-align: center;
-            padding: 20px;
-        }
+        .reset-container { text-align: center; padding: 20px; }
 
         .btn-reset {
             background: none;
-            color: var(--ios-red);
-            border: 1px solid var(--ios-red);
+            color: var(--accent-red);
+            border: 1.5px solid var(--accent-red);
             padding: 12px 24px;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
+            transition: background 0.3s;
         }
 
+        .btn-reset:active { background: rgba(255, 59, 48, 0.1); }
+
         /* ===== CALENDAR SCREEN ===== */
-        .calendar-screen {
-            padding: 20px 15px;
-        }
+        .calendar-screen { padding: 20px 15px; }
 
         .month-navigation {
             display: flex;
@@ -425,39 +484,43 @@
         }
 
         .month-navigation button {
-            background: var(--ios-blue);
+            background: var(--button-brown);
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 10px 14px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
+            transition: background 0.3s;
         }
+
+        .month-navigation button:active { background: #A07850; }
 
         .month-name {
             font-size: 18px;
             font-weight: 700;
+            color: var(--text-dark);
         }
 
         .calendar-grid {
-            background: var(--ios-card);
-            border-radius: 16px;
-            padding: 15px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .weekday {
             text-align: center;
             font-size: 12px;
             font-weight: 700;
-            color: #8e8e93;
+            color: var(--text-light);
             padding: 8px 0;
         }
 
@@ -472,48 +535,37 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            background: #f8f8f8;
+            background: var(--secondary-bg);
             font-weight: 600;
             font-size: 14px;
             border: 2px solid transparent;
             transition: all 0.3s;
+            color: var(--text-dark);
         }
 
-        .day.other-month {
-            color: #d1d1d6;
-        }
-
-        .day.completed {
-            background: var(--ios-green);
-            color: white;
-            border-color: var(--ios-green);
-        }
-
-        .day.today {
-            border-color: var(--ios-blue);
-        }
+        .day.other-month { color: #D0D0D0; opacity: 0.5; }
+        .day.completed { background: var(--accent-green); color: white; border-color: var(--accent-green); }
+        .day.today { border-color: var(--button-brown); }
 
         /* ===== WEIGHT SCREEN ===== */
-        .weight-screen {
-            padding: 20px 15px;
-        }
+        .weight-screen { padding: 20px 15px; }
 
         .weight-input-card {
-            background: var(--ios-card);
-            border-radius: 16px;
+            background: var(--card-bg);
+            border-radius: 20px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .weight-input-card label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             font-weight: 600;
             font-size: 14px;
-            color: #8e8e93;
+            color: var(--text-light);
         }
 
         .weight-input-group {
@@ -525,196 +577,143 @@
         .weight-input-group input {
             flex: 1;
             padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #d1d1d6;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
             font-size: 16px;
+            background: var(--secondary-bg);
+            color: var(--text-dark);
         }
 
         .weight-input-group button {
-            background: var(--ios-blue);
+            background: var(--button-brown);
             color: white;
             border: none;
             padding: 12px 24px;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: 700;
             cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
         }
 
+        .weight-input-group button:active { background: #A07850; transform: scale(0.98); }
+
         .weight-history {
-            background: var(--ios-card);
-            border-radius: 16px;
+            background: var(--card-bg);
+            border-radius: 20px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .weight-history h3 {
             margin-top: 0;
             font-size: 16px;
             font-weight: 700;
+            color: var(--text-dark);
         }
 
         .weight-entry {
             display: flex;
             justify-content: space-between;
             padding: 12px 0;
-            border-bottom: 1px solid #f2f2f7;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .weight-entry:last-child {
-            border-bottom: none;
-        }
-
-        .weight-date {
-            color: #8e8e93;
-            font-size: 14px;
-        }
-
-        .weight-value {
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .weight-change {
-            font-size: 12px;
-            margin-top: 3px;
-            color: #8e8e93;
-        }
+        .weight-entry:last-child { border-bottom: none; }
+        .weight-date { color: var(--text-light); font-size: 14px; }
+        .weight-value { font-weight: 700; font-size: 16px; color: var(--button-brown); }
+        .weight-change { font-size: 12px; margin-top: 3px; color: var(--text-light); }
 
         .weight-chart {
-            background: var(--ios-card);
-            border-radius: 16px;
+            background: var(--card-bg);
+            border-radius: 20px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .chart-title {
             font-size: 16px;
             font-weight: 700;
             margin-bottom: 15px;
+            color: var(--text-dark);
         }
 
-        /* ===== ACHIEVEMENTS SECTION ===== */
-        .achievements-section {
-            padding: 20px 15px;
-            background: var(--ios-bg);
+        /* ===== CALENDAR POPUP ===== */
+        .cal-popup-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 5000;
+            align-items: center;
+            justify-content: center;
         }
+        .cal-popup-overlay.show { display: flex; }
 
-        .achievements-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .achievements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 12px;
-        }
-
-        .achievement {
-            background: var(--ios-card);
-            border-radius: 14px;
-            padding: 12px;
+        .cal-popup {
+            background: var(--card-bg);
+            border-radius: 22px;
+            padding: 28px 24px 20px;
+            width: 80vw;
+            max-width: 320px;
+            box-shadow: 0 16px 50px rgba(0,0,0,0.25);
             text-align: center;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-            position: relative;
-            transition: all 0.3s;
+            animation: popIn 0.25s ease;
         }
 
-        .achievement.locked {
-            opacity: 0.5;
-            background: #f2f2f7;
-        }
+        .cal-popup-icon { font-size: 40px; margin-bottom: 10px; }
+        .cal-popup-title { font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
+        .cal-popup-date { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
 
-        .achievement.unlocked {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
-        }
+        .cal-popup-btns { display: flex; gap: 10px; }
 
-        .achievement-icon {
-            font-size: 32px;
-            margin-bottom: 8px;
+        .cal-popup-btn {
+            flex: 1;
+            padding: 13px;
+            border-radius: 14px;
+            border: none;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: opacity 0.2s;
         }
-
-        .achievement-label {
-            font-size: 11px;
-            font-weight: 600;
-            word-break: break-word;
-        }
-
-        .achievement-target {
-            font-size: 10px;
-            color: #8e8e93;
-            margin-top: 4px;
-        }
-
-        .achievement-progress {
-            font-size: 9px;
-            color: #8e8e93;
-            margin-top: 3px;
-        }
-
+        .cal-popup-btn:active { opacity: 0.75; }
+        .cal-popup-btn.confirm { background: var(--accent-green); color: white; }
+        .cal-popup-btn.delete { background: var(--accent-red); color: white; }
+        .cal-popup-btn.cancel { background: var(--secondary-bg); color: var(--text-dark); }
         .unlock-notification {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
+            background: var(--card-bg);
             padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border-radius: 25px;
+            box-shadow: 0 12px 45px rgba(0,0,0,0.2);
             text-align: center;
             z-index: 10000;
             animation: popIn 0.5s ease;
         }
 
-        .unlock-notification.hide {
-            display: none;
-        }
+        .unlock-notification.hide { display: none; }
 
         @keyframes popIn {
-            0% {
-                transform: translate(-50%, -50%) scale(0.5);
-                opacity: 0;
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.1);
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
 
-        .unlock-notification-icon {
-            font-size: 60px;
-            margin-bottom: 15px;
-        }
-
-        .unlock-notification-text {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .unlock-notification-subtext {
-            font-size: 14px;
-            color: #8e8e93;
-        }
-
-        @media (max-width: 600px) {
-            .home-stats {
-                grid-template-columns: 1fr;
-            }
-        }
+        .unlock-notification-icon { font-size: 60px; margin-bottom: 15px; }
+        .unlock-notification-text { font-size: 18px; font-weight: 700; margin-bottom: 5px; color: var(--text-dark); }
+        .unlock-notification-subtext { font-size: 14px; color: var(--text-light); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="content" id="mainContent">
+    <div class="screens" id="mainContent">
+
         <!-- HOME SCREEN -->
         <div id="homeScreen" class="home-screen">
             <div class="profile-box" id="profileBox">
@@ -731,6 +730,14 @@
                 <div class="stat-card">
                     <div class="stat-value" id="currentWeight">-</div>
                     <div class="stat-label">Текущий вес</div>
+                </div>
+            </div>
+
+            <!-- ACHIEVEMENTS — внизу главной, горизонтальный скролл -->
+            <div class="achievements-section">
+                <div class="achievements-title">🏆 Награды</div>
+                <div class="achievements-scroll-wrapper">
+                    <div class="achievements-grid" id="achievementsGrid"></div>
                 </div>
             </div>
         </div>
@@ -751,7 +758,10 @@
             </div>
 
             <div class="workout-content">
-                <button class="warmup-btn" id="warmupBtn" onclick="markWarmup()">🔥 Разминка - 10 минут</button>
+                <div class="warmup-block" id="warmupBlock">
+                    <div class="warmup-title">🔥 Разминка - 10 минут</div>
+                    <button class="warmup-btn" id="warmupBtn" onclick="markWarmup()">Готово</button>
+                </div>
                 <div id="workout-content"></div>
 
                 <div class="reset-container">
@@ -824,11 +834,14 @@
             <div class="nav-label">Вес</div>
         </button>
     </div>
+</div>
 
-    <!-- ACHIEVEMENTS -->
-    <div class="achievements-section" id="achievementsSection">
-        <div class="achievements-title">🏆 Награды</div>
-        <div class="achievements-grid" id="achievementsGrid"></div>
+<div class="cal-popup-overlay" id="calPopupOverlay">
+    <div class="cal-popup">
+        <div class="cal-popup-icon" id="calPopupIcon">📅</div>
+        <div class="cal-popup-title" id="calPopupTitle"></div>
+        <div class="cal-popup-date" id="calPopupDate"></div>
+        <div class="cal-popup-btns" id="calPopupBtns"></div>
     </div>
 </div>
 
@@ -937,60 +950,45 @@
         }
     };
 
-    const achievements = [
-        { id: 'w10', icon: '💪', label: '10', target: '10 тренировок' },
-        { id: 'w15', icon: '💪', label: '15', target: '15 тренировок' },
-        { id: 'w20', icon: '💪', label: '20', target: '20 тренировок' },
-        { id: 'w25', icon: '💪', label: '25', target: '25 тренировок' },
-        { id: 'w30', icon: '💪', label: '30', target: '30 тренировок' },
-        { id: 'w35', icon: '💪', label: '35', target: '35 тренировок' },
-        { id: 'w40', icon: '💪', label: '40', target: '40 тренировок' },
-        { id: 'w45', icon: '💪', label: '45', target: '45 тренировок' },
-        { id: 'w50', icon: '💪', label: '50', target: '50 тренировок' }
-    ];
+    const achievementIcons = ['🌱','💪','🔥','⭐','🏅','🥉','🥈','🥇','🏆','👑','💎','🚀','⚡','🎯','🦁','🌟','🔱','🎖','👊','🏋️'];
+    const achievements = Array.from({length: 20}, (_, i) => {
+        const target = (i + 1) * 5;
+        return { id: `w${target}`, icon: achievementIcons[i % achievementIcons.length], label: `${target}`, target: `${target} тренировок` };
+    });
 
     let totalTasks = 0;
     let currentDay = 1;
     let currentMonth = new Date().getMonth();
     let currentYear = new Date().getFullYear();
 
-    // Load data from localStorage
     function init() {
         updateUI();
         renderAchievements();
         setupWeightChart();
         document.getElementById('profileInput').addEventListener('change', uploadProfile);
+        switchScreen('home');
     }
 
     function switchScreen(screen) {
-        console.log('Switching to screen:', screen); // Debug
-        
-        // Скрываем все экраны
         document.getElementById('homeScreen').style.display = 'none';
         document.getElementById('workoutScreen').style.display = 'none';
         document.getElementById('calendarScreen').style.display = 'none';
         document.getElementById('weightScreen').style.display = 'none';
 
-        // Убираем активный класс со всех кнопок
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('active');
-        });
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
 
-        // Показываем нужный экран
-        if(screen === 'home') {
+        if (screen === 'home') {
             document.getElementById('homeScreen').style.display = 'block';
             document.getElementById('navHome').classList.add('active');
-        } else if(screen === 'workout') {
+        } else if (screen === 'workout') {
             document.getElementById('workoutScreen').style.display = 'block';
             document.getElementById('navWorkout').classList.add('active');
-            if(totalTasks === 0) {
-                loadDay(1);
-            }
-        } else if(screen === 'calendar') {
+            if (totalTasks === 0) loadDay(1);
+        } else if (screen === 'calendar') {
             document.getElementById('calendarScreen').style.display = 'block';
             document.getElementById('navCalendar').classList.add('active');
             renderCalendar();
-        } else if(screen === 'weight') {
+        } else if (screen === 'weight') {
             document.getElementById('weightScreen').style.display = 'block';
             document.getElementById('navWeight').classList.add('active');
             updateWeightUI();
@@ -999,38 +997,42 @@
 
     function uploadProfile() {
         const file = document.getElementById('profileInput').files[0];
-        if(file) {
+        if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const profileBox = document.getElementById('profileBox');
                 profileBox.innerHTML = `<img src="${e.target.result}" alt="Profile">
-                    <button class="profile-upload" onclick="document.getElementById('profileInput').click()">📷</button>`;
+                    <button class="profile-upload" onclick="removeProfile()" title="Удалить фото">✕</button>`;
                 localStorage.setItem('profileImage', e.target.result);
             };
             reader.readAsDataURL(file);
         }
     }
 
+    function removeProfile() {
+        const profileBox = document.getElementById('profileBox');
+        profileBox.innerHTML = `📸
+            <input type="file" id="profileInput" accept="image/*">
+            <button class="profile-upload" onclick="document.getElementById('profileInput').click()">📷</button>`;
+        localStorage.removeItem('profileImage');
+        document.getElementById('profileInput').addEventListener('change', uploadProfile);
+    }
+
     function loadDay(day) {
         currentDay = day;
-        document.querySelectorAll('.day-btn').forEach((b, i) => b.classList.toggle('active', i+1 === day));
+        document.querySelectorAll('.day-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === day));
         const container = document.getElementById('workout-content');
         container.innerHTML = `<h1>${data[day].name}</h1>`;
         totalTasks = 0;
 
-        // Check if warmup was done today
         const warmupId = `warmup-d${day}`;
         const warmupDone = localStorage.getItem(warmupId);
-        const warmupBtn = document.getElementById('warmupBtn');
-
-        if(warmupDone) {
-            warmupBtn.classList.add('completed');
-        } else {
-            warmupBtn.classList.remove('completed');
-        }
+        const warmupBlock = document.getElementById('warmupBlock');
+        warmupDone ? warmupBlock.classList.add('completed') : warmupBlock.classList.remove('completed');
+        totalTasks++; // Разминка тоже считается в прогрессе
 
         data[day].groups.forEach((group, gIdx) => {
-            if(group.type === 'cardio') {
+            if (group.type === 'cardio') {
                 totalTasks++;
                 const id = `d${day}-cardio-${gIdx}`;
                 const completed = localStorage.getItem(id) ? 'completed' : '';
@@ -1073,22 +1075,19 @@
     }
 
     function saveExerciseData(id) {
-        const weight = document.getElementById(`w-${id}`).value;
-        const reps = document.getElementById(`r-${id}`).value;
-        localStorage.setItem(`${id}-weight`, weight);
-        localStorage.setItem(`${id}-reps`, reps);
+        localStorage.setItem(`${id}-weight`, document.getElementById(`w-${id}`).value);
+        localStorage.setItem(`${id}-reps`, document.getElementById(`r-${id}`).value);
     }
 
     function showContent(id) {
         const el = document.getElementById('c-' + id);
         const toggle = document.getElementById('toggle-' + id);
-        const allContent = document.querySelectorAll('.content');
         const isVisible = el.classList.contains('show');
 
-        allContent.forEach(c => c.classList.remove('show'));
+        document.querySelectorAll('.content').forEach(c => c.classList.remove('show'));
         document.querySelectorAll('.toggle-icon').forEach(t => t.classList.remove('open'));
 
-        if(!isVisible) {
+        if (!isVisible) {
             el.classList.add('show');
             toggle.classList.add('open');
         }
@@ -1096,16 +1095,17 @@
 
     function markWarmup() {
         const warmupId = `warmup-d${currentDay}`;
-        const warmupBtn = document.getElementById('warmupBtn');
+        const warmupBlock = document.getElementById('warmupBlock');
 
-        if(localStorage.getItem(warmupId)) {
+        if (localStorage.getItem(warmupId)) {
             localStorage.removeItem(warmupId);
-            warmupBtn.classList.remove('completed');
+            warmupBlock.classList.remove('completed');
         } else {
             localStorage.setItem(warmupId, 'true');
-            warmupBtn.classList.add('completed');
+            warmupBlock.classList.add('completed');
             recordWorkout();
         }
+        updateProgress();
     }
 
     function mark(id) {
@@ -1113,19 +1113,28 @@
         const content = document.getElementById('c-' + id);
         const toggle = document.getElementById('toggle-' + id);
 
-        if(el.classList.contains('completed')) {
+        if (el.classList.contains('completed')) {
             el.classList.remove('completed');
             localStorage.removeItem(id);
         } else {
             el.classList.add('completed');
             localStorage.setItem(id, 'true');
-            if(content) {
-                content.classList.remove('show');
-                if(toggle) toggle.classList.remove('open');
-            }
+            if (content) content.classList.remove('show');
+            if (toggle) toggle.classList.remove('open');
             recordWorkout();
         }
         updateProgress();
+    }
+
+    // Считаем упражнения + разминку
+    function updateProgress() {
+        const container = document.getElementById('workout-content');
+        let completed = container.querySelectorAll('.completed').length;
+        // Добавляем разминку если она выполнена
+        if (document.getElementById('warmupBlock').classList.contains('completed')) completed++;
+        const percent = totalTasks > 0 ? Math.round((completed / totalTasks) * 100) : 0;
+        document.getElementById('p-bar').style.width = percent + '%';
+        document.getElementById('progress-text').innerText = 'Прогресс: ' + percent + '%';
     }
 
     function recordWorkout() {
@@ -1136,21 +1145,11 @@
         updateUI();
     }
 
-    function updateProgress() {
-        const completed = document.querySelectorAll('.completed').length;
-        const percent = totalTasks > 0 ? Math.round((completed / totalTasks) * 100) : 0;
-        document.getElementById('p-bar').style.width = percent + '%';
-        document.getElementById('progress-text').innerText = 'Прогресс: ' + percent + '%';
-    }
-
     function resetProgress() {
-        if(confirm("Очистить прогресс и начать новую тренировку?")) {
-            // Clear only current day data
+        if (confirm("Очистить прогресс и начать новую тренировку?")) {
             const day = currentDay;
             Object.keys(localStorage).forEach(key => {
-                if(key.includes(`d${day}-`)) {
-                    localStorage.removeItem(key);
-                }
+                if (key.includes(`d${day}-`)) localStorage.removeItem(key);
             });
             loadDay(day);
         }
@@ -1162,7 +1161,7 @@
         document.getElementById('totalWorkouts').innerText = totalCount;
 
         const weights = JSON.parse(localStorage.getItem('weights') || '[]');
-        if(weights.length > 0) {
+        if (weights.length > 0) {
             document.getElementById('currentWeight').innerText = weights[weights.length - 1].weight + ' кг';
         }
 
@@ -1176,55 +1175,96 @@
         const daysInMonth = lastDay.getDate();
         const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
 
-        document.getElementById('monthName').innerText = new Date(currentYear, currentMonth).toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' });
+        document.getElementById('monthName').innerText = new Date(currentYear, currentMonth)
+            .toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' });
 
         let html = '';
-        for(let i = 0; i < startDay; i++) {
-            html += `<div class="day other-month"></div>`;
-        }
+        for (let i = 0; i < startDay; i++) html += `<div class="day other-month"></div>`;
 
         const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
         const today = new Date().toISOString().split('T')[0];
 
-        for(let day = 1; day <= daysInMonth; day++) {
+        for (let day = 1; day <= daysInMonth; day++) {
             const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             const isCompleted = workouts[dateStr];
             const isToday = dateStr === today;
-            const classes = `day ${isCompleted ? 'completed' : ''} ${isToday ? 'today' : ''}`;
-
-            html += `<div class="${classes}" onclick="toggleWorkoutDay('${dateStr}')">${day}</div>`;
+            html += `<div class="day ${isCompleted ? 'completed' : ''} ${isToday ? 'today' : ''}" onclick="calDayClick('${dateStr}')">${day}</div>`;
         }
 
         document.getElementById('calendarDays').innerHTML = html;
     }
 
-    function toggleWorkoutDay(dateStr) {
+    function calDayClick(dateStr) {
         const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
-        if(workouts[dateStr]) {
-            delete workouts[dateStr];
+        const isCompleted = workouts[dateStr];
+
+        // Форматируем дату красиво
+        const [y, m, d] = dateStr.split('-');
+        const prettyDate = new Date(y, m - 1, d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        const overlay = document.getElementById('calPopupOverlay');
+        const icon = document.getElementById('calPopupIcon');
+        const title = document.getElementById('calPopupTitle');
+        const dateEl = document.getElementById('calPopupDate');
+        const btns = document.getElementById('calPopupBtns');
+
+        if (isCompleted) {
+            // Уже отмечена — предлагаем удалить
+            icon.innerText = '🗑️';
+            title.innerText = 'Удалить тренировку?';
+            dateEl.innerText = prettyDate;
+            btns.innerHTML = `
+                <button class="cal-popup-btn delete" onclick="calConfirmDelete('${dateStr}')">Удалить</button>
+                <button class="cal-popup-btn cancel" onclick="calClosePopup()">Назад</button>`;
         } else {
-            workouts[dateStr] = true;
+            // Пустая — предлагаем добавить
+            icon.innerText = '💪';
+            title.innerText = 'Записать тренировку?';
+            dateEl.innerText = prettyDate;
+            btns.innerHTML = `
+                <button class="cal-popup-btn confirm" onclick="calConfirmAdd('${dateStr}')">Подтвердить</button>
+                <button class="cal-popup-btn cancel" onclick="calClosePopup()">Отмена</button>`;
         }
+
+        overlay.classList.add('show');
+    }
+
+    function calConfirmAdd(dateStr) {
+        const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
+        workouts[dateStr] = true;
         localStorage.setItem('workouts', JSON.stringify(workouts));
+        calClosePopup();
         renderCalendar();
         updateUI();
     }
 
+    function calConfirmDelete(dateStr) {
+        const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
+        delete workouts[dateStr];
+        localStorage.setItem('workouts', JSON.stringify(workouts));
+        calClosePopup();
+        renderCalendar();
+        updateUI();
+    }
+
+    function calClosePopup() {
+        document.getElementById('calPopupOverlay').classList.remove('show');
+    }
+
+    // Закрыть попап по клику на фон
+    document.getElementById('calPopupOverlay').addEventListener('click', function(e) {
+        if (e.target === this) calClosePopup();
+    });
+
     function prevMonth() {
         currentMonth--;
-        if(currentMonth < 0) {
-            currentMonth = 11;
-            currentYear--;
-        }
+        if (currentMonth < 0) { currentMonth = 11; currentYear--; }
         renderCalendar();
     }
 
     function nextMonth() {
         currentMonth++;
-        if(currentMonth > 11) {
-            currentMonth = 0;
-            currentYear++;
-        }
+        if (currentMonth > 11) { currentMonth = 0; currentYear++; }
         renderCalendar();
     }
 
@@ -1232,18 +1272,10 @@
     function addWeight() {
         const input = document.getElementById('weightInput');
         const weight = parseFloat(input.value);
-
-        if(!weight || weight <= 0) {
-            alert('Введи корректный вес');
-            return;
-        }
+        if (!weight || weight <= 0) { alert('Введи корректный вес'); return; }
 
         const weights = JSON.parse(localStorage.getItem('weights') || '[]');
-        weights.push({
-            weight: weight,
-            date: new Date().toLocaleDateString('ru-RU')
-        });
-
+        weights.push({ weight, date: new Date().toLocaleDateString('ru-RU') });
         localStorage.setItem('weights', JSON.stringify(weights));
         input.value = '';
         updateWeightUI();
@@ -1254,16 +1286,15 @@
         const weights = JSON.parse(localStorage.getItem('weights') || '[]');
         let html = '';
 
-        for(let i = weights.length - 1; i >= 0; i--) {
+        for (let i = weights.length - 1; i >= 0; i--) {
             const w = weights[i];
             let change = '';
-            if(i < weights.length - 1) {
+            if (i < weights.length - 1) {
                 const diff = w.weight - weights[i + 1].weight;
                 const sign = diff > 0 ? '+' : '';
-                const color = diff > 0 ? 'var(--ios-red)' : 'var(--ios-green)';
+                const color = diff > 0 ? 'var(--accent-red)' : 'var(--accent-green)';
                 change = `<div class="weight-change" style="color: ${color};">${sign}${diff.toFixed(1)} кг</div>`;
             }
-
             html += `
                 <div class="weight-entry">
                     <div>
@@ -1271,121 +1302,100 @@
                         ${change}
                     </div>
                     <div class="weight-value">${w.weight} кг</div>
-                </div>
-            `;
+                </div>`;
         }
 
         document.getElementById('weightList').innerHTML = html || '<p style="text-align: center; color: #8e8e93;">Записей нет</p>';
         drawWeightChart();
     }
 
-    function setupWeightChart() {
-        // Setup done in drawWeightChart
-    }
+    function setupWeightChart() { /* init in drawWeightChart */ }
 
     function drawWeightChart() {
         const canvas = document.getElementById('weightChart');
-        if(!canvas) return;
-
+        if (!canvas) return;
         const weights = JSON.parse(localStorage.getItem('weights') || '[]');
-        if(weights.length === 0) {
-            canvas.getContext('2d').fillStyle = '#8e8e93';
-            canvas.getContext('2d').font = '14px system-ui';
-            canvas.getContext('2d').fillText('Нет данных для графика', 50, 100);
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (weights.length === 0) {
+            ctx.fillStyle = '#A0A0A0';
+            ctx.font = '14px system-ui';
+            ctx.fillText('Нет данных для графика', 50, 100);
             return;
         }
 
-        const ctx = canvas.getContext('2d');
         const padding = 40;
         const width = canvas.width - padding * 2;
         const height = canvas.height - padding * 2;
-
         const values = weights.map(w => w.weight);
         const minWeight = Math.min(...values) - 1;
         const maxWeight = Math.max(...values) + 1;
         const range = maxWeight - minWeight;
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Grid lines
-        ctx.strokeStyle = '#f2f2f7';
+        ctx.strokeStyle = '#E8D4C4';
         ctx.lineWidth = 1;
-        for(let i = 0; i <= 4; i++) {
+        for (let i = 0; i <= 4; i++) {
             const y = padding + (height / 4) * i;
-            ctx.beginPath();
-            ctx.moveTo(padding, y);
-            ctx.lineTo(canvas.width - padding, y);
-            ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(padding, y); ctx.lineTo(canvas.width - padding, y); ctx.stroke();
         }
 
-        // Plot points
-        ctx.strokeStyle = '#007aff';
+        ctx.strokeStyle = '#B8956A';
         ctx.lineWidth = 2;
         ctx.beginPath();
-
-        for(let i = 0; i < values.length; i++) {
+        values.forEach((v, i) => {
             const x = padding + (width / (values.length - 1 || 1)) * i;
-            const y = padding + height - ((values[i] - minWeight) / range) * height;
-
-            if(i === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-        }
+            const y = padding + height - ((v - minWeight) / range) * height;
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        });
         ctx.stroke();
 
-        // Dots
-        ctx.fillStyle = '#007aff';
-        for(let i = 0; i < values.length; i++) {
+        ctx.fillStyle = '#B8956A';
+        values.forEach((v, i) => {
             const x = padding + (width / (values.length - 1 || 1)) * i;
-            const y = padding + height - ((values[i] - minWeight) / range) * height;
-            ctx.beginPath();
-            ctx.arc(x, y, 4, 0, Math.PI * 2);
-            ctx.fill();
-        }
+            const y = padding + height - ((v - minWeight) / range) * height;
+            ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fill();
+        });
 
-        // Axes
-        ctx.strokeStyle = '#000';
-        ctx.lineWidth = 1;
+        ctx.strokeStyle = '#666'; ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.moveTo(padding, padding);
-        ctx.lineTo(padding, canvas.height - padding);
+        ctx.moveTo(padding, padding); ctx.lineTo(padding, canvas.height - padding);
         ctx.lineTo(canvas.width - padding, canvas.height - padding);
         ctx.stroke();
     }
 
     // ACHIEVEMENTS
     function renderAchievements() {
+        const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
+        const count = Object.keys(workouts).length;
+
         const html = achievements.map(a => {
-            const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
-            const count = Object.keys(workouts).length;
             const target = parseInt(a.target);
             const unlocked = count >= target;
             const progress = Math.min(count, target);
-
             return `
                 <div class="achievement ${unlocked ? 'unlocked' : 'locked'}">
                     <div class="achievement-icon">${a.icon}</div>
                     <div class="achievement-label">${a.label}</div>
                     <div class="achievement-target">${a.target}</div>
                     <div class="achievement-progress">${progress}/${target}</div>
-                </div>
-            `;
+                </div>`;
         }).join('');
 
         document.getElementById('achievementsGrid').innerHTML = html;
     }
 
     function checkAchievements(count) {
-        const targets = [10, 15, 20, 25, 30, 35, 40, 45, 50];
+        const targets = Array.from({length: 20}, (_, i) => (i + 1) * 5);
         const checkedAchievements = JSON.parse(localStorage.getItem('checkedAchievements') || '[]');
 
-        for(let target of targets) {
-            if(count === target && !checkedAchievements.includes(target)) {
+        for (let target of targets) {
+            if (count === target && !checkedAchievements.includes(target)) {
                 showUnlockNotification(target);
                 checkedAchievements.push(target);
                 localStorage.setItem('checkedAchievements', JSON.stringify(checkedAchievements));
             }
         }
-
         renderAchievements();
     }
 
@@ -1394,25 +1404,18 @@
         document.getElementById('notificationIcon').innerText = '🏆';
         document.getElementById('notificationText').innerText = 'Награда разблокирована!';
         document.getElementById('notificationSubtext').innerText = target + ' тренировок';
-
         notification.classList.remove('hide');
-        setTimeout(() => {
-            notification.classList.add('hide');
-        }, 3000);
+        setTimeout(() => notification.classList.add('hide'), 3000);
     }
 
-    // Load profile image
     window.addEventListener('load', () => {
         const profileImage = localStorage.getItem('profileImage');
-        if(profileImage) {
-            const profileBox = document.getElementById('profileBox');
-            profileBox.innerHTML = `<img src="${profileImage}" alt="Profile">
-                <button class="profile-upload" onclick="document.getElementById('profileInput').click()">📷</button>`;
+        if (profileImage) {
+            document.getElementById('profileBox').innerHTML = `<img src="${profileImage}" alt="Profile">
+                <button class="profile-upload" onclick="removeProfile()" title="Удалить фото">✕</button>`;
         }
-
         init();
     });
 </script>
-
 </body>
 </html>
