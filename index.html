@@ -86,7 +86,7 @@
 
         .profile-box {
             width: 100%;
-            height: 252px;
+            height: 277px;
             background: var(--card-bg);
             border-radius: 30px;
             margin-bottom: 20px;
@@ -1050,6 +1050,7 @@
             document.getElementById('workoutScreen').style.display = 'block';
             document.getElementById('navWorkout').classList.add('active');
             if (totalTasks === 0) loadDay(1);
+            updateDayButtons();
         } else if (screen === 'calendar') {
             document.getElementById('calendarScreen').style.display = 'block';
             document.getElementById('navCalendar').classList.add('active');
@@ -1203,6 +1204,7 @@
         document.getElementById('progress-text').innerText = 'Прогресс: ' + percent + '%';
 
         if (percent === 100) showCelebration();
+        updateDayButtons();
     }
 
     function recordWorkout() {
@@ -1216,10 +1218,75 @@
     function resetProgress() {
         if (confirm("Очистить прогресс и начать новую тренировку?")) {
             const day = currentDay;
+            // Очищаем упражнения
             Object.keys(localStorage).forEach(key => {
                 if (key.includes(`d${day}-`)) localStorage.removeItem(key);
             });
+            // Очищаем разминку тоже
+            localStorage.removeItem(`warmup-d${day}`);
             loadDay(day);
+            updateDayButtons();
+        }
+    }
+
+    function getDayProgress(day) {
+        // Считаем процент выполнения конкретного дня
+        let tasks = 1; // разминка
+        let done = localStorage.getItem(`warmup-d${day}`) ? 1 : 0;
+        data[day].groups.forEach((group, gIdx) => {
+            if (group.type === 'cardio') {
+                tasks++;
+                if (localStorage.getItem(`d${day}-cardio-${gIdx}`)) done++;
+            } else {
+                group.exercises.forEach((ex, i) => {
+                    tasks++;
+                    const id = `d${day}-g-${group.name.replace(/\s+/g, '')}-${i}`;
+                    if (localStorage.getItem(id)) done++;
+                });
+            }
+        });
+        return tasks > 0 ? Math.round((done / tasks) * 100) : 0;
+    }
+
+    function updateDayButtons() {
+        const allDays = [1, 2, 3];
+        let allComplete = true;
+        allDays.forEach(d => {
+            const btn = document.getElementById(`b${d}`);
+            const pct = getDayProgress(d);
+            if (pct === 100) {
+                btn.style.background = 'var(--accent-green)';
+                btn.style.color = 'white';
+                btn.style.boxShadow = '0 4px 12px rgba(52,199,89,0.4)';
+            } else {
+                // Восстанавливаем стиль — активный или обычный
+                if (d === currentDay) {
+                    btn.style.background = 'var(--button-brown)';
+                    btn.style.color = 'white';
+                    btn.style.boxShadow = '0 4px 12px rgba(184,149,106,0.4)';
+                } else {
+                    btn.style.background = 'var(--card-bg)';
+                    btn.style.color = 'var(--button-brown)';
+                    btn.style.boxShadow = '0 2px 6px rgba(0,0,0,0.08)';
+                }
+                allComplete = false;
+            }
+        });
+
+        // Все 3 дня завершены — предлагаем сбросить цикл
+        if (allComplete) {
+            setTimeout(() => {
+                if (confirm("🎉 Все тренировки цикла завершены!\n\nСбросить прогресс и начать заново?")) {
+                    allDays.forEach(d => {
+                        Object.keys(localStorage).forEach(key => {
+                            if (key.includes(`d${d}-`)) localStorage.removeItem(key);
+                        });
+                        localStorage.removeItem(`warmup-d${d}`);
+                    });
+                    loadDay(1);
+                    updateDayButtons();
+                }
+            }, 500);
         }
     }
 
@@ -1361,20 +1428,46 @@
                 const diff = w.weight - weights[i + 1].weight;
                 const sign = diff > 0 ? '+' : '';
                 const color = diff > 0 ? 'var(--accent-red)' : 'var(--accent-green)';
-                change = `<div class="weight-change" style="color: ${color};">${sign}${diff.toFixed(1)} кг</div>`;
+                change = `<div class="weight-change" style="color:${color};">${sign}${diff.toFixed(1)} кг</div>`;
             }
             html += `
-                <div class="weight-entry">
+                <div class="weight-entry" id="we-${i}">
                     <div>
                         <div class="weight-date">${w.date}</div>
                         ${change}
                     </div>
-                    <div class="weight-value">${w.weight} кг</div>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <div class="weight-value" id="wv-${i}">${w.weight} кг</div>
+                        <button onclick="editWeight(${i})" style="background:none;border:none;font-size:16px;cursor:pointer;padding:4px;" title="Редактировать">✏️</button>
+                        <button onclick="deleteWeight(${i})" style="background:none;border:none;font-size:16px;cursor:pointer;padding:4px;" title="Удалить">✕</button>
+                    </div>
                 </div>`;
         }
 
-        document.getElementById('weightList').innerHTML = html || '<p style="text-align: center; color: #8e8e93;">Записей нет</p>';
+        document.getElementById('weightList').innerHTML = html || '<p style="text-align:center;color:#8e8e93;">Записей нет</p>';
         drawWeightChart();
+    }
+
+    function deleteWeight(idx) {
+        if (!confirm('Удалить эту запись?')) return;
+        const weights = JSON.parse(localStorage.getItem('weights') || '[]');
+        weights.splice(idx, 1);
+        localStorage.setItem('weights', JSON.stringify(weights));
+        updateWeightUI();
+        updateUI();
+    }
+
+    function editWeight(idx) {
+        const weights = JSON.parse(localStorage.getItem('weights') || '[]');
+        const current = weights[idx].weight;
+        const newVal = prompt('Введи новый вес (кг):', current);
+        if (newVal === null) return;
+        const parsed = parseFloat(newVal);
+        if (!parsed || parsed <= 0) { alert('Некорректный вес'); return; }
+        weights[idx].weight = parsed;
+        localStorage.setItem('weights', JSON.stringify(weights));
+        updateWeightUI();
+        updateUI();
     }
 
     function setupWeightChart() { /* init in drawWeightChart */ }
