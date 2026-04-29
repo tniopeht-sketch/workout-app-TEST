@@ -6,100 +6,198 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Fitness App">
+    <meta name="apple-mobile-web-app-title" content="ЖирOFFка">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><text x='50%' y='50%' font-size='90' text-anchor='middle' dy='.3em'>💪</text></svg>">
-    <title>Fitness App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="icon" id="dynamicFavicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><text x='50%' y='50%' font-size='90' text-anchor='middle' dy='.3em'>💪</text></svg>">
+    <link rel="apple-touch-icon" id="appleTouchIcon" href="">
+    <title>ЖирOFFка</title>
+    <script>
+    // Generate app icon via canvas and set as apple-touch-icon
+    (function() {
+        var c = document.createElement('canvas');
+        c.width = c.height = 180;
+        var ctx = c.getContext('2d');
+
+        // Rounded rect clip
+        var r = 38;
+        ctx.beginPath();
+        ctx.moveTo(r, 0); ctx.lineTo(180-r, 0);
+        ctx.quadraticCurveTo(180, 0, 180, r);
+        ctx.lineTo(180, 180-r);
+        ctx.quadraticCurveTo(180, 180, 180-r, 180);
+        ctx.lineTo(r, 180);
+        ctx.quadraticCurveTo(0, 180, 0, 180-r);
+        ctx.lineTo(0, r);
+        ctx.quadraticCurveTo(0, 0, r, 0);
+        ctx.closePath();
+        ctx.clip();
+
+        // Background gradient
+        var bg = ctx.createLinearGradient(0, 0, 180, 180);
+        bg.addColorStop(0, '#1a0535');
+        bg.addColorStop(0.5, '#2d0a5e');
+        bg.addColorStop(1, '#0f0524');
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, 180, 180);
+
+        // Pink glow top-left
+        var g1 = ctx.createRadialGradient(30, 30, 0, 30, 30, 90);
+        g1.addColorStop(0, 'rgba(255,31,113,0.55)');
+        g1.addColorStop(1, 'rgba(255,31,113,0)');
+        ctx.fillStyle = g1; ctx.fillRect(0, 0, 180, 180);
+
+        // Purple glow bottom-right
+        var g2 = ctx.createRadialGradient(150, 150, 0, 150, 150, 90);
+        g2.addColorStop(0, 'rgba(112,0,255,0.5)');
+        g2.addColorStop(1, 'rgba(112,0,255,0)');
+        ctx.fillStyle = g2; ctx.fillRect(0, 0, 180, 180);
+
+        // Yellow glow top-right
+        var g3 = ctx.createRadialGradient(155, 25, 0, 155, 25, 70);
+        g3.addColorStop(0, 'rgba(255,204,0,0.35)');
+        g3.addColorStop(1, 'rgba(255,204,0,0)');
+        ctx.fillStyle = g3; ctx.fillRect(0, 0, 180, 180);
+
+        // "ЖО" text — Ж in white, OFF in yellow
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        // Shadow glow
+        ctx.shadowColor = 'rgba(255,31,113,0.8)';
+        ctx.shadowBlur = 18;
+
+        ctx.font = 'bold 68px Arial, sans-serif';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText('Жир', 90, 72);
+
+        ctx.shadowColor = 'rgba(255,204,0,0.9)';
+        ctx.shadowBlur = 16;
+        ctx.fillStyle = '#ffcc00';
+        ctx.font = 'bold 52px Arial, sans-serif';
+        ctx.fillText('OFFка', 90, 128);
+
+        var dataUrl = c.toDataURL('image/png');
+        document.getElementById('appleTouchIcon').href = dataUrl;
+        document.getElementById('dynamicFavicon').href = dataUrl;
+    })();
+    </script>
     <style>
-        :root {
-            --primary-bg: #E8D4C4;
-            --secondary-bg: #F5E6DC;
-            --card-bg: #FFFFFF;
-            --button-brown: #B8956A;
-            --button-light: #D4AF9F;
-            --accent-green: #34c759;
-            --accent-red: #ff3b30;
-            --text-dark: #3D3D3D;
-            --text-light: #8B8B8B;
-            --border-color: #E0D0C8;
-        }
-
-        * { box-sizing: border-box; }
-
-        body {
-            font-family: -apple-system, system-ui, sans-serif;
-            background: linear-gradient(135deg, #E8D4C4 0%, #D4C0B0 100%);
-            color: var(--text-dark);
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary-accent: #ff1f71;
+            --secondary-accent: #ffcc00;
+            --purple-accent: #7000ff;
+            --dark-bg: #0f0524;
+            --glass-light: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            /* мягкий зелёный для прогресса/выполненного */
+            --green-main: #5dd85d;
+            --green-bg: rgba(93, 216, 93, 0.28);
+            --green-border: rgba(93, 216, 93, 0.75);
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--dark-bg);
+            overflow: hidden;
+        }
+
+        body {
+            background-image: 
+                radial-gradient(at 10% 30%, #ff1f71 0px, transparent 40%),
+                radial-gradient(at 80% 10%, #ffcc00 0px, transparent 30%),
+                radial-gradient(at 90% 80%, #7000ff 0px, transparent 40%),
+                radial-gradient(at 50% 50%, #4800ff 0px, transparent 50%);
         }
 
         .container {
             display: flex;
             flex-direction: column;
             height: 100vh;
+            position: relative;
         }
 
+        /* ===== HEADER ===== */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 900;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 31, 113, 0.6);
+        }
+
+        .logo-accent {
+            color: #ffcc00;
+        }
+
+        /* ===== SCREENS ===== */
         .screens {
             flex: 1;
             overflow-y: auto;
-            padding-bottom: 70px;
+            padding-top: 70px;
+            padding-bottom: 80px;
+            scroll-behavior: smooth;
         }
 
-        .navbar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: var(--card-bg);
-            display: flex;
-            justify-content: space-around;
-            border-top: 1px solid var(--border-color);
-            z-index: 999;
-            padding: 8px 0 20px 0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        /* ===== GLASS EFFECT ===== */
+        .glass {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 
+                inset 0 0 15px 5px rgba(255, 255, 255, 0.25),
+                0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            padding: 8px 12px;
-            cursor: pointer;
-            border: none;
-            background: none;
-            font-size: 24px;
-            color: #A0A0A0;
-            transition: color 0.3s;
+        /* ===== HOME SCREEN ===== */
+        .home-screen {
+            padding: 20px;
         }
-
-        .nav-item.active { color: var(--button-brown); }
-
-        .nav-label {
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        /* ===== HOME PAGE ===== */
-        .home-screen { padding: 20px; }
 
         .profile-box {
             width: 100%;
-            height: 277px;
-            background: var(--card-bg);
+            height: 280px;
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 30px;
             margin-bottom: 20px;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 80px;
-            color: #C0C0C0;
+            color: rgba(255, 255, 255, 0.3);
             position: relative;
         }
 
@@ -113,7 +211,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background: var(--button-brown);
+            background: var(--primary-accent);
             color: white;
             border: none;
             border-radius: 50%;
@@ -121,10 +219,24 @@
             height: 50px;
             font-size: 24px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(184, 149, 106, 0.4);
+            box-shadow: 0 8px 20px rgba(255, 31, 113, 0.6);
+            transition: all 0.3s;
         }
 
-        #profileInput { display: none; }
+        .profile-upload:active {
+            transform: scale(0.95);
+        }
+
+        .profile-upload.dimmed {
+            background: rgba(255, 31, 113, 0.45);
+            opacity: 0.65;
+            box-shadow: none;
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+        }
+
+        #profileInput {
+            display: none;
+        }
 
         .home-stats {
             display: grid;
@@ -134,37 +246,43 @@
         }
 
         .stat-card {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 20px;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            box-shadow: inset 0 0 15px 5px rgba(255, 255, 255, 0.15);
         }
 
         .stat-value {
             font-size: 28px;
-            font-weight: 700;
-            color: var(--button-brown);
-            margin-bottom: 5px;
+            font-weight: 800;
+            color: #ffcc00;
+            margin-bottom: 8px;
         }
 
         .stat-label {
             font-size: 13px;
-            color: var(--text-light);
+            color: var(--text-secondary);
             text-transform: uppercase;
             font-weight: 600;
+            letter-spacing: 1px;
         }
 
-        /* ===== ACHIEVEMENTS — горизонтальный скролл ===== */
+        /* ===== ACHIEVEMENTS ===== */
         .achievements-section {
             padding: 0 0 20px 0;
         }
 
         .achievements-title {
             font-size: 15px;
-            font-weight: 700;
+            font-weight: 800;
             margin-bottom: 10px;
-            color: var(--text-dark);
+            color: #ffcc00;
+            letter-spacing: 1px;
+            padding: 0 20px;
         }
 
         .achievements-scroll-wrapper {
@@ -175,7 +293,9 @@
             padding: 4px 20px 8px;
         }
 
-        .achievements-scroll-wrapper::-webkit-scrollbar { display: none; }
+        .achievements-scroll-wrapper::-webkit-scrollbar {
+            display: none;
+        }
 
         .achievements-grid {
             display: flex;
@@ -184,13 +304,14 @@
             width: max-content;
         }
 
-        /* Увеличены на 15% (было 65px -> ~75px) */
         .achievement {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 14px;
             padding: 10px 11px;
             text-align: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
             width: 75px;
             flex: 0 0 75px;
             transition: all 0.3s;
@@ -199,13 +320,14 @@
 
         .achievement.locked {
             opacity: 0.35;
-            background: var(--secondary-bg);
+            background: rgba(255, 255, 255, 0.04);
             cursor: default;
         }
 
         .achievement.unlocked {
-            background: linear-gradient(135deg, #FFD700 0%, #FFC700 100%);
-            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.35);
+            background: linear-gradient(135deg, rgba(255, 204, 0, 0.4) 0%, rgba(255, 31, 113, 0.4) 100%);
+            border: 1.5px solid rgba(255, 204, 0, 0.6);
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
             transform: scale(1.05);
             cursor: pointer;
         }
@@ -214,151 +336,191 @@
             transform: scale(0.98);
         }
 
-        .achievement-icon { font-size: 20px; margin-bottom: 2px; display: block; }
-        .achievement-label { font-size: 12px; font-weight: 700; color: var(--text-dark); display: block; text-align: center; }
-        .achievement-target { font-size: 10px; color: var(--text-light); margin-top: 2px; display: block; text-align: center; word-break: keep-all; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .achievement-progress { font-size: 10px; color: var(--text-light); margin-top: 1px; display: block; text-align: center; }
+        .achievement-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+            display: block;
+        }
 
-        /* ===== ACHIEVEMENT MODAL ===== */
-        .achievement-modal-overlay {
+        .achievement-label {
+            font-size: 12px;
+            font-weight: 800;
+            color: #ffcc00;
+            display: block;
+            text-align: center;
+        }
+
+        .achievement-target {
+            font-size: 9px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            display: block;
+            text-align: center;
+        }
+
+        .achievement-progress {
+            font-size: 9px;
+            color: var(--text-secondary);
+            margin-top: 1px;
+            display: block;
+            text-align: center;
+        }
+
+        /* ===== MODALS ===== */
+        .modal-overlay {
             position: fixed;
             inset: 0;
-            z-index: 8000;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 500;
             display: flex;
             align-items: center;
             justify-content: center;
-            pointer-events: none;
             opacity: 0;
+            pointer-events: none;
             transition: opacity 0.3s ease;
         }
 
-        .achievement-modal-overlay.show {
+        .modal-overlay.show {
+            opacity: 1;
             pointer-events: all;
-            opacity: 1;
         }
 
-        /* Blur backdrop */
-        .achievement-modal-backdrop {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .achievement-modal-overlay.show .achievement-modal-backdrop {
-            opacity: 1;
-        }
-
-        /* Modal card */
-        .achievement-modal-card {
-            position: relative;
-            z-index: 1;
-            background: linear-gradient(145deg, #FFF9E6 0%, #FFE066 40%, #FFD700 100%);
-            border-radius: 28px;
-            padding: 36px 28px 32px;
-            width: min(85vw, 320px);
+        .modal-content {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 35px;
+            padding: 40px 30px;
+            width: 85vw;
+            max-width: 340px;
             text-align: center;
-            box-shadow:
-                0 30px 80px rgba(0,0,0,0.3),
-                0 0 0 2px rgba(255,215,0,0.6),
-                inset 0 1px 0 rgba(255,255,255,0.8);
-            transform: scale(0.6) translateY(30px);
+            color: white;
+            transform: scale(0.85);
             opacity: 0;
-            transition:
-                transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                opacity 0.3s ease;
+            transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1.2);
         }
 
-        .achievement-modal-overlay.show .achievement-modal-card {
-            transform: scale(1) translateY(0);
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
             opacity: 1;
-        }
-
-        .achievement-modal-overlay.closing .achievement-modal-card {
-            transform: scale(0.6) translateY(30px);
-            opacity: 0;
-        }
-
-        .achievement-modal-overlay.closing .achievement-modal-backdrop {
-            opacity: 0;
-        }
-
-        .achievement-modal-overlay.closing {
-            pointer-events: none;
         }
 
         .modal-icon {
-            font-size: 64px;
+            font-size: 60px;
+            margin-bottom: 15px;
             display: block;
-            margin-bottom: 16px;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
-            animation: floatIcon 2.5s ease-in-out infinite;
-        }
-
-        @keyframes floatIcon {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
         }
 
         .modal-title {
-            font-size: 13px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #8B6914;
-            margin-bottom: 6px;
-        }
-
-        .modal-headline {
-            font-size: 20px;
-            font-weight: 800;
-            color: #3D2A00;
-            margin-bottom: 18px;
-            line-height: 1.2;
-        }
-
-        .modal-divider {
-            width: 50px;
-            height: 3px;
-            background: linear-gradient(90deg, #B8956A, #FFD700);
-            border-radius: 2px;
-            margin: 0 auto 18px;
-        }
-
-        .modal-message {
-            font-family: 'Caveat', cursive;
             font-size: 22px;
-            font-weight: 600;
-            color: #3D2A00;
-            line-height: 1.45;
-            text-align: center;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #ffcc00;
+            letter-spacing: 1px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 13px 20px;
+            border-radius: 22px;
+            border: none;
+            font-family: 'Exo 2';
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-btn:active {
+            transform: scale(0.96);
+        }
+
+        .modal-btn-confirm {
+            background: #ffcc00;
+            color: #0f0524;
+        }
+
+        .modal-btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* ===== MAIN BUTTONS ===== */
+        .main-btn {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: white;
+            padding: 16px 40px;
+            border-radius: 30px;
+            border: none;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 
+                inset 0 0 15px 5px rgba(255, 255, 255, 0.15),
+                0 10px 30px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .main-btn:active {
+            transform: scale(0.95);
+        }
+
+        .main-btn-primary {
+            background: linear-gradient(135deg, #ff1f71 0%, #ffcc00 100%);
+            border: none;
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 31, 113, 0.5);
         }
 
         /* ===== WORKOUT SCREEN ===== */
         .progress-fixed-top {
-            position: sticky;
-            top: 0;
-            background: var(--card-bg);
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             padding: 12px 15px 8px;
             z-index: 100;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         #progress-text {
             font-size: 14px;
             font-weight: 800;
             margin-bottom: 5px;
-            color: var(--text-dark);
+            color: #ffcc00;
         }
 
         .progress-container {
             width: 100%;
             height: 14px;
-            background: #E0D0C8;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 7px;
             overflow: hidden;
         }
@@ -366,54 +528,16 @@
         .progress-bar {
             height: 100%;
             width: 0%;
-            background: var(--accent-green);
+            background: linear-gradient(90deg, rgba(93, 216, 93, 0.95) 0%, rgba(93, 216, 93, 0.5) 100%);
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        .warmup-block {
-            background: var(--card-bg);
-            padding: 16px;
-            border-radius: 20px;
-            margin: 15px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .warmup-block.completed {
-            background: #E8F5E9;
-            border: 2px solid var(--accent-green);
-        }
-
-        .warmup-title {
-            font-weight: 700;
-            font-size: 16px;
-            width: 100%;
-            text-align: center;
-            color: var(--text-dark);
-        }
-
-        .warmup-btn {
-            width: auto;
-            padding: 12px 32px;
-            background: var(--button-brown);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            font-weight: 700;
-            font-size: 15px;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.1s;
-        }
-
-        .warmup-btn:active { background: #A07850; transform: scale(0.98); }
 
         .day-selector {
             display: flex;
             gap: 10px;
-            margin: 15px 15px;
+            margin: 80px 15px 15px 15px;
+            position: relative;
+            z-index: 95;
         }
 
         .day-btn {
@@ -421,58 +545,119 @@
             padding: 12px;
             border-radius: 16px;
             border: none;
-            background: var(--card-bg);
-            color: var(--button-brown);
-            font-weight: 600;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            font-weight: 700;
+            font-family: 'Exo 2';
             cursor: pointer;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
             transition: all 0.3s;
         }
 
         .day-btn.active {
-            background: var(--button-brown);
-            color: white;
-            box-shadow: 0 4px 12px rgba(184, 149, 106, 0.4);
+            background: linear-gradient(135deg, #ff1f71, #ffcc00);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 31, 113, 0.5);
         }
 
-        .workout-content { padding: 0 15px 20px; }
+        .warmup-block {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 16px;
+            border-radius: 20px;
+            margin: 15px;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .warmup-block.completed {
+            background: var(--green-bg);
+            border: 1.5px solid var(--green-border);
+        }
+
+        .warmup-title {
+            font-weight: 800;
+            font-size: 16px;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .warmup-btn {
+            padding: 12px 32px;
+            background: linear-gradient(135deg, #ff1f71, #ffcc00);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: 800;
+            font-size: 14px;
+            font-family: 'Exo 2';
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .warmup-btn:active {
+            transform: scale(0.95);
+        }
+
+        .workout-content {
+            padding: 80px 15px 20px;
+        }
 
         .workout-content h1 {
             font-size: 24px;
-            font-weight: 700;
-            margin: 20px 0 15px 0;
-            color: var(--text-dark);
+            font-weight: 800;
+            margin: 20px auto 15px;
+            color: #ffcc00;
+            letter-spacing: 1px;
+            text-align: center;
+            padding: 12px 16px;
+            border-radius: 22px;
+            border: 1.5px solid rgba(255, 204, 0, 0.25);
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
         }
 
         .muscle-group {
-            border: 2px solid var(--border-color);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
             border-radius: 20px;
             padding: 12px;
             margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         .group-title {
             font-size: 12px;
             text-transform: uppercase;
-            color: var(--text-light);
+            color: #ffcc00;
             margin: 0 0 12px 10px;
             font-weight: 800;
-            letter-spacing: 0.6px;
+            letter-spacing: 1px;
         }
 
         .exercise-card {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 18px;
             margin-bottom: 12px;
             overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
             transition: all 0.3s ease;
         }
 
         .exercise-card.completed {
-            background: #E8F5E9;
-            border: 2px solid var(--accent-green);
+            background: rgba(52, 199, 89, 0.28);
+            border: 1.5px solid var(--green-border);
         }
 
         .header {
@@ -480,33 +665,43 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 15px;
             cursor: pointer;
             user-select: none;
-            color: var(--text-dark);
+            color: white;
         }
 
         .toggle-icon {
-            color: var(--button-brown);
+            color: #ffcc00;
             font-size: 20px;
             transition: transform 0.3s ease;
         }
 
-        .toggle-icon.open { transform: rotate(45deg); }
+        .toggle-icon.open {
+            transform: rotate(45deg);
+        }
 
         .content {
             display: none;
             padding: 0 16px 16px;
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             animation: slideDown 0.3s ease;
         }
 
-        .content.show { display: block; }
+        .content.show {
+            display: block;
+        }
 
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .exercise-img {
@@ -516,15 +711,15 @@
             display: block;
             max-height: 220px;
             object-fit: contain;
-            background: var(--secondary-bg);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .instr {
             font-size: 13px;
             line-height: 1.5;
-            color: var(--text-dark);
+            color: var(--text-secondary);
             margin-bottom: 15px;
-            background: var(--secondary-bg);
+            background: rgba(255, 255, 255, 0.05);
             padding: 12px;
             border-radius: 10px;
         }
@@ -535,47 +730,61 @@
             margin-bottom: 12px;
         }
 
-        .inputs div { flex: 1; }
+        .inputs div {
+            flex: 1;
+        }
 
         .inputs small {
             display: block;
             margin-bottom: 4px;
-            color: var(--text-light);
-            font-weight: 500;
+            color: var(--text-secondary);
+            font-weight: 600;
         }
 
         input {
             width: 100%;
             padding: 10px 12px;
             border-radius: 10px;
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             font-size: 16px;
-            box-sizing: border-box;
-            background: var(--secondary-bg);
-            color: var(--text-dark);
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
 
         .btn-done {
             width: 100%;
             padding: 14px;
-            background: var(--button-brown);
+            background: linear-gradient(135deg, #ff1f71, #ffcc00);
             color: white;
             border: none;
             border-radius: 16px;
-            font-weight: 700;
-            font-size: 15px;
+            font-weight: 800;
+            font-size: 14px;
+            font-family: 'Exo 2';
             cursor: pointer;
-            transition: background 0.3s, transform 0.1s;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .btn-done:active { background: #A07850; transform: scale(0.98); }
+        .btn-done:active {
+            transform: scale(0.95);
+        }
 
         .cardio-block {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.08);
             padding: 18px;
             border-radius: 20px;
             margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -583,28 +792,42 @@
         }
 
         .cardio-block.completed {
-            background: #E8F5E9;
-            border: 2px solid var(--accent-green);
+            background: var(--green-bg);
+            border: 1.5px solid var(--green-border);
         }
 
-        .reset-container { text-align: center; padding: 20px; }
+        .reset-container {
+            text-align: center;
+            padding: 20px;
+        }
 
         .btn-reset {
-            background: none;
-            color: var(--accent-red);
-            border: 1.5px solid var(--accent-red);
+            background: rgba(255, 59, 48, 0.15);
+            color: #ff3b30;
+            border: 1.5px solid rgba(255, 59, 48, 0.5);
             padding: 12px 24px;
             border-radius: 12px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
+            font-family: 'Exo 2';
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
 
-        .btn-reset:active { background: rgba(255, 59, 48, 0.1); }
+        .btn-reset:active {
+            background: rgba(255, 59, 48, 0.25);
+        }
 
         /* ===== CALENDAR SCREEN ===== */
-        .calendar-screen { padding: 20px 15px; }
+        .calendar-screen {
+            padding: 20px 15px;
+        }
+
+        .calendar-screen h2 {
+            color: #ffcc00;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
 
         .month-navigation {
             display: flex;
@@ -614,29 +837,34 @@
         }
 
         .month-navigation button {
-            background: var(--button-brown);
+            background: linear-gradient(135deg, #ff1f71, #ffcc00);
             color: white;
             border: none;
             padding: 10px 14px;
             border-radius: 12px;
             cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
+            font-weight: 700;
+            font-family: 'Exo 2';
+            transition: all 0.3s;
         }
 
-        .month-navigation button:active { background: #A07850; }
+        .month-navigation button:active {
+            transform: scale(0.95);
+        }
 
         .month-name {
             font-size: 18px;
-            font-weight: 700;
-            color: var(--text-dark);
+            font-weight: 800;
+            color: white;
         }
 
         .calendar-grid {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 20px;
             padding: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
         }
 
         .weekdays {
@@ -649,8 +877,8 @@
         .weekday {
             text-align: center;
             font-size: 12px;
-            font-weight: 700;
-            color: var(--text-light);
+            font-weight: 800;
+            color: #ffcc00;
             padding: 8px 0;
         }
 
@@ -667,35 +895,57 @@
             justify-content: center;
             border-radius: 12px;
             cursor: pointer;
-            background: var(--secondary-bg);
-            font-weight: 600;
+            background: rgba(255, 255, 255, 0.08);
+            font-weight: 700;
             font-size: 14px;
-            border: 2px solid transparent;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s;
-            color: var(--text-dark);
+            color: white;
         }
 
-        .day.other-month { color: #D0D0D0; opacity: 0.5; }
-        .day.completed { background: var(--accent-green); color: white; border-color: var(--accent-green); }
-        .day.today { border-color: var(--button-brown); }
+        .day.other-month {
+            color: rgba(255, 255, 255, 0.3);
+            opacity: 0.4;
+        }
+
+        .day.completed {
+            background: var(--green-bg);
+            color: white;
+            border-color: var(--green-border);
+            box-shadow: 0 0 22px rgba(52, 199, 89, 0.35);
+        }
+
+        .day.today {
+            border-color: #ffcc00;
+        }
 
         /* ===== WEIGHT SCREEN ===== */
-        .weight-screen { padding: 20px 15px; }
+        .weight-screen {
+            padding: 20px 15px;
+        }
+
+        .weight-screen h2 {
+            color: #ffcc00;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
 
         .weight-input-card {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
         }
 
         .weight-input-card label {
             display: block;
             margin-bottom: 12px;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 14px;
-            color: var(--text-light);
+            color: var(--text-secondary);
         }
 
         .weight-input-group {
@@ -706,131 +956,247 @@
 
         .weight-input-group input {
             flex: 1;
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            font-size: 16px;
-            background: var(--secondary-bg);
-            color: var(--text-dark);
         }
 
         .weight-input-group button {
-            background: var(--button-brown);
+            background: linear-gradient(135deg, #ff1f71, #ffcc00);
             color: white;
             border: none;
             padding: 12px 24px;
             border-radius: 12px;
-            font-weight: 700;
+            font-weight: 800;
+            font-family: 'Exo 2';
             cursor: pointer;
-            transition: background 0.3s, transform 0.1s;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .weight-input-group button:active { background: #A07850; transform: scale(0.98); }
+        .weight-input-group button:active {
+            transform: scale(0.95);
+        }
 
         .weight-history {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
         }
 
         .weight-history h3 {
             margin-top: 0;
             font-size: 16px;
-            font-weight: 700;
-            color: var(--text-dark);
+            font-weight: 800;
+            color: #ffcc00;
         }
 
         .weight-entry {
             display: flex;
             justify-content: space-between;
             padding: 12px 0;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .weight-entry:last-child { border-bottom: none; }
-        .weight-date { color: var(--text-light); font-size: 14px; }
-        .weight-value { font-weight: 700; font-size: 16px; color: var(--button-brown); }
-        .weight-change { font-size: 12px; margin-top: 3px; color: var(--text-light); }
+        .weight-entry:last-child {
+            border-bottom: none;
+        }
+
+        .weight-date {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .weight-value {
+            font-weight: 800;
+            font-size: 16px;
+            color: #ffcc00;
+        }
+
+        .weight-change {
+            font-size: 12px;
+            margin-top: 3px;
+            color: var(--text-secondary);
+        }
 
         .weight-chart {
-            background: var(--card-bg);
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
         }
 
         .chart-title {
             font-size: 16px;
-            font-weight: 700;
+            font-weight: 800;
             margin-bottom: 15px;
-            color: var(--text-dark);
+            color: #ffcc00;
         }
 
-        /* ===== CALENDAR POPUP ===== */
-        .cal-popup-overlay {
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            z-index: 800;
+            padding: 8px 12px 20px 12px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 8px;
+            cursor: pointer;
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
+            flex: 1;
+            min-width: 0;
+            height: 64px;
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s;
+        }
+
+        .nav-item.active {
+            color: #ffcc00;
+            border-color: rgba(255, 204, 0, 0.55);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: inherit;
+        }
+
+        /* ===== ACHIEVEMENT MODAL ===== */
+        .achievement-modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0);
-            z-index: 5000;
+            z-index: 4200;
             display: flex;
             align-items: center;
             justify-content: center;
             pointer-events: none;
-            transition: background 0.2s ease;
-        }
-        .cal-popup-overlay.show {
-            background: rgba(0,0,0,0.45);
-            pointer-events: all;
-        }
-
-        .cal-popup {
-            background: var(--card-bg);
-            border-radius: 22px;
-            padding: 28px 24px 20px;
-            width: 80vw;
-            max-width: 320px;
-            box-shadow: 0 16px 50px rgba(0,0,0,0.25);
-            text-align: center;
-            transform: scale(0.85);
             opacity: 0;
-            transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), opacity 0.18s ease;
-            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
-        .cal-popup-overlay.show .cal-popup {
-            transform: scale(1);
-            opacity: 1;
+
+        .achievement-modal-overlay.show {
             pointer-events: all;
+            opacity: 1;
         }
 
-        .cal-popup-icon { font-size: 40px; margin-bottom: 10px; }
-        .cal-popup-title { font-size: 16px; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
-        .cal-popup-date { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
-
-        .cal-popup-btns { display: flex; gap: 10px; }
-
-        .cal-popup-btn {
-            flex: 1;
-            padding: 13px;
-            border-radius: 14px;
-            border: none;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            transition: opacity 0.2s;
+        .achievement-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            /* чтобы фон с фейерверком и надписью читались сквозь модалку */
+            background: rgba(0, 0, 0, 0.06);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        .cal-popup-btn:active { opacity: 0.75; }
-        .cal-popup-btn.confirm { background: var(--accent-green); color: white; }
-        .cal-popup-btn.delete { background: var(--accent-red); color: white; }
-        .cal-popup-btn.cancel { background: var(--secondary-bg); color: var(--text-dark); }
 
-        /* ===== FIREWORKS CELEBRATION ===== */
+        .achievement-modal-overlay.show .achievement-modal-backdrop {
+            opacity: 1;
+        }
+
+        .achievement-modal-card {
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1.5px solid rgba(255, 255, 255, 0.28);
+            box-shadow: 
+                inset 0 0 10px 3px rgba(255, 255, 255, 0.10),
+                0 10px 30px rgba(0, 0, 0, 0.18);
+            border-radius: 35px;
+            padding: 36px 28px 32px;
+            width: min(85vw, 320px);
+            text-align: center;
+            transform: scale(0.6) translateY(30px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .achievement-modal-overlay.show .achievement-modal-card {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .modal-icon {
+            font-size: 64px;
+            display: block;
+            margin-bottom: 16px;
+            animation: floatIcon 2.5s ease-in-out infinite;
+        }
+
+        @keyframes floatIcon {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        .modal-title {
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #ffcc00;
+            margin-bottom: 6px;
+        }
+
+        .modal-headline {
+            font-size: 20px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 18px;
+            line-height: 1.2;
+        }
+
+        .modal-divider {
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #ffcc00, #ff1f71);
+            border-radius: 2px;
+            margin: 0 auto 18px;
+        }
+
+        .modal-message {
+            font-family: 'Caveat', cursive;
+            font-size: 22px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.45;
+            text-align: center;
+        }
+
+        /* ===== CELEBRATION ===== */
         .celebration-overlay {
             position: fixed;
             inset: 0;
-            z-index: 9000;
+            z-index: 4000;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -838,57 +1204,322 @@
             opacity: 0;
             transition: opacity 0.4s ease;
         }
-        .celebration-overlay.show { opacity: 1; }
-        .celebration-overlay.hide { opacity: 0; }
+
+        .celebration-overlay.show {
+            opacity: 1;
+        }
 
         .celebration-text {
-            font-family: 'Georgia', serif;
+            font-family: 'Exo 2', sans-serif;
             font-size: 32px;
-            font-weight: 700;
-            color: white;
+            font-weight: 800;
+            color: #ffcc00;
             text-align: center;
-            text-shadow: 0 2px 20px rgba(0,0,0,0.5), 0 0 40px rgba(255,215,0,0.8);
+            text-shadow: 0 0 30px rgba(255, 204, 0, 0.8), 0 0 60px rgba(255, 31, 113, 0.6);
             line-height: 1.3;
             padding: 30px 36px;
-            background: rgba(0,0,0,0.55);
+            background: rgba(0, 0, 0, 0.25);
             border-radius: 28px;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 204, 0, 0.18);
             animation: celebPulse 0.6s ease infinite alternate;
+            display: none;
         }
 
         @keyframes celebPulse {
-            from { transform: scale(1); }
-            to { transform: scale(1.04); }
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.04);
+            }
         }
 
-        .unlock-notification {
+        /* ===== CAL POPUP ===== */
+        .cal-popup-overlay {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 25px;
-            box-shadow: 0 12px 45px rgba(0,0,0,0.2);
+            inset: 0;
+            background: rgba(0, 0, 0, 0);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            transition: background 0.2s ease;
+        }
+
+        .cal-popup-overlay.show {
+            background: rgba(0, 0, 0, 0.65);
+            pointer-events: all;
+        }
+
+        .cal-popup {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 28px;
+            padding: 28px 24px 20px;
+            width: 80vw;
+            max-width: 320px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
             text-align: center;
-            z-index: 10000;
-            animation: popIn 0.5s ease;
+            transform: scale(0.85);
+            opacity: 0;
+            transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            color: white;
         }
 
-        .unlock-notification.hide { display: none; }
-
-        @keyframes popIn {
-            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
-            50% { transform: translate(-50%, -50%) scale(1.1); }
-            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        .cal-popup-overlay.show .cal-popup {
+            transform: scale(1);
+            opacity: 1;
+            pointer-events: all;
         }
 
-        .unlock-notification-icon { font-size: 60px; margin-bottom: 15px; }
-        .unlock-notification-text { font-size: 18px; font-weight: 700; margin-bottom: 5px; color: var(--text-dark); }
-        .unlock-notification-subtext { font-size: 14px; color: var(--text-light); }
+        .cal-popup-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .cal-popup-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #ffcc00;
+            margin-bottom: 6px;
+        }
+
+        .cal-popup-date {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .cal-popup-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .cal-popup-btn {
+            flex: 1;
+            padding: 13px;
+            border-radius: 14px;
+            border: none;
+            font-weight: 800;
+            font-size: 12px;
+            font-family: 'Exo 2';
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cal-popup-btn:active {
+            transform: scale(0.96);
+        }
+
+        .cal-popup-btn.confirm {
+            background: linear-gradient(135deg, #5dd85d, #6fe56f);
+            color: white;
+        }
+
+        .cal-popup-btn.delete {
+            background: rgba(255, 59, 48, 0.3);
+            color: #ff3b30;
+            border: 1px solid rgba(255, 59, 48, 0.5);
+        }
+
+        .cal-popup-btn.cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* ===== WALKING STATS SCREEN ===== */
+        .walking-screen {
+            padding: 20px 15px;
+        }
+
+        .walking-screen h2 {
+            color: #ffcc00;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .stats-toggle {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0 20px 0;
+        }
+
+        .stats-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 16px;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            font-weight: 700;
+            font-family: 'Exo 2';
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .stats-btn.active {
+            background: linear-gradient(135deg, #ff1f71, #ffcc00);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 31, 113, 0.5);
+        }
+
+        .walking-chart-container {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .walking-chart-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            position: relative;
+        }
+
+        .walking-chart-wrapper::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .walking-chart-wrapper::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .walking-chart-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(255, 204, 0, 0.4);
+            border-radius: 3px;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .summary-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .summary-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffcc00;
+            margin-bottom: 8px;
+        }
+
+        .summary-secondary {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* ===== WALKING CALENDAR POPUP ===== */
+        .walking-choice-popup {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1.5px solid rgba(255, 255, 255, 0.5);
+            border-radius: 28px;
+            padding: 28px 24px 20px;
+            width: 80vw;
+            max-width: 320px;
+            text-align: center;
+            color: white;
+        }
+
+        .walking-choice-popup-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #ffcc00;
+            margin-bottom: 20px;
+        }
+
+        .walking-choice-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .walking-choice-btn {
+            padding: 14px;
+            border-radius: 14px;
+            border: none;
+            font-weight: 800;
+            font-size: 14px;
+            font-family: 'Exo 2';
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .walking-choice-btn.workout {
+            background: linear-gradient(135deg, #5dd85d, #6fe56f);
+            color: white;
+        }
+
+        .walking-choice-btn.walking {
+            background: linear-gradient(135deg, #00a8ff, #0099ff);
+            color: white;
+        }
+
+        .walking-choice-btn.cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .walking-choice-btn:active {
+            transform: scale(0.96);
+        }
+
+        #walkingKmInput {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            font-size: 16px;
+            margin: 15px 0;
+            font-family: 'Exo 2';
+        }
+
+        #walkingKmInput::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
     </style>
 </head>
 <body>
+
+<header class="app-header">
+    <div class="logo-text">Жир<span class="logo-accent">OFF</span>ка</div>
+</header>
 
 <div class="container">
     <div class="screens" id="mainContent">
@@ -970,6 +1601,35 @@
             </div>
         </div>
 
+        <!-- WALKING STATS SCREEN -->
+        <div id="walkingScreen" style="display: none;" class="walking-screen">
+            <h2 style="margin-top: 0;">🚶 Статистика ходьбы</h2>
+            
+            <div class="stats-toggle">
+                <button class="stats-btn active" id="weekBtn" onclick="switchWalkingView('week')">Неделя</button>
+                <button class="stats-btn" id="monthBtn" onclick="switchWalkingView('month')">Месяц</button>
+            </div>
+
+            <div class="walking-chart-container">
+                <div class="walking-chart-wrapper" id="walkingChartWrapper">
+                    <canvas id="walkingChart" style="height: 300px;"></canvas>
+                </div>
+            </div>
+
+            <div class="stats-summary">
+                <div class="summary-card">
+                    <div class="summary-label">За неделю</div>
+                    <div class="summary-value" id="weekKm">0 км</div>
+                    <div class="summary-secondary" id="weekSteps">0 шагов</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">За месяц</div>
+                    <div class="summary-value" id="monthKm">0 км</div>
+                    <div class="summary-secondary" id="monthSteps">0 шагов</div>
+                </div>
+            </div>
+        </div>
+
         <!-- WEIGHT SCREEN -->
         <div id="weightScreen" style="display: none;" class="weight-screen">
             <h2 style="margin-top: 0;">⚖️ Отслеживание веса</h2>
@@ -998,6 +1658,10 @@
         <button class="nav-item active" id="navHome" onclick="switchScreen('home')">
             <div>🏠</div>
             <div class="nav-label">Главная</div>
+        </button>
+        <button class="nav-item" id="navWalking" onclick="switchScreen('walking')">
+            <div>🚶</div>
+            <div class="nav-label">Ходьба</div>
         </button>
         <button class="nav-item" id="navWorkout" onclick="switchScreen('workout')">
             <div>💪</div>
@@ -1028,7 +1692,7 @@
 
 <div class="celebration-overlay" id="celebrationOverlay">
     <canvas id="fireworksCanvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
-    <div class="celebration-text">🎉 Лера, ты это сделала! 🎉</div>
+    <div class="celebration-text" id="celebrationText">🎉 ЛЕРА, ТЫ ЭТО СДЕЛАЛА! 🎉</div>
 </div>
 
 <div class="cal-popup-overlay" id="calPopupOverlay">
@@ -1040,13 +1704,70 @@
     </div>
 </div>
 
-<div class="unlock-notification hide" id="unlockNotification">
-    <div class="unlock-notification-icon" id="notificationIcon">🏆</div>
-    <div class="unlock-notification-text" id="notificationText">Награда разблокирована!</div>
-    <div class="unlock-notification-subtext" id="notificationSubtext">10 тренировок</div>
+<div class="cal-popup-overlay" id="resetPopupOverlay">
+    <div class="cal-popup">
+        <div class="cal-popup-icon">⚠️</div>
+        <div class="cal-popup-title" id="resetPopupTitle">Сбросить прогресс?</div>
+        <div class="cal-popup-date">Вся работа за этот день будет удалена</div>
+        <div class="cal-popup-btns" id="resetPopupBtns">
+            <button class="cal-popup-btn delete" onclick="confirmResetProgress()">Сбросить</button>
+            <button class="cal-popup-btn cancel" onclick="closeResetPopup()">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<div class="cal-popup-overlay" id="editWeightPopupOverlay">
+    <div class="cal-popup">
+        <div class="cal-popup-icon">✏️</div>
+        <div class="cal-popup-title">Редактировать вес</div>
+        <input type="number" id="editWeightInput" placeholder="Вес (кг)" step="0.1" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: white; font-size: 16px; margin: 15px 0; font-family: 'Exo 2';">
+        <div class="cal-popup-btns">
+            <button class="cal-popup-btn confirm" onclick="confirmEditWeight()">Сохранить</button>
+            <button class="cal-popup-btn cancel" onclick="closeEditWeightPopup()">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<div class="cal-popup-overlay" id="deleteWeightPopupOverlay">
+    <div class="cal-popup">
+        <div class="cal-popup-icon">🗑️</div>
+        <div class="cal-popup-title">Удалить запись?</div>
+        <div class="cal-popup-date">Эта операция не может быть отменена</div>
+        <div class="cal-popup-btns">
+            <button class="cal-popup-btn delete" onclick="confirmDeleteWeight()">Удалить</button>
+            <button class="cal-popup-btn cancel" onclick="closeDeleteWeightPopup()">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<div class="cal-popup-overlay" id="saveWorkoutPopupOverlay">
+    <div class="cal-popup">
+        <div class="cal-popup-icon">💾</div>
+        <div class="cal-popup-title">Записать тренировку?</div>
+        <div class="cal-popup-date">Добавить сегодняшнюю тренировку в календарь?</div>
+        <div class="cal-popup-btns">
+            <button class="cal-popup-btn confirm" onclick="confirmSaveWorkout()">Да, записать</button>
+            <button class="cal-popup-btn cancel" onclick="closeSaveWorkoutPopup()">Не записывать</button>
+        </div>
+    </div>
+</div>
+
+<div class="cal-popup-overlay" id="walkingChoicePopupOverlay">
+    <div class="cal-popup" style="text-align:center;">
+        <div class="walking-choice-popup-title">Что добавить на эту дату?</div>
+        <div class="walking-choice-btns" id="walkingChoiceBtns">
+            <button class="walking-choice-btn workout" onclick="chooseActivity('workout')">💪 Тренировку</button>
+            <button class="walking-choice-btn walking" onclick="chooseActivity('walking')">🚶 Спортивную ходьбу</button>
+            <button class="walking-choice-btn cancel" onclick="closeWalkingChoice()">Отмена</button>
+        </div>
+    </div>
 </div>
 
 <script>
+    // Переменные для хранения индекса при редактировании/удалении веса
+    let editingWeightIdx = null;
+    let deletingWeightIdx = null;
+    let saveWorkoutRequested = false;
     // ===== ACHIEVEMENT MESSAGES =====
     const achievementMessages = {
         5:   "Лера, начало положено! Кроссовки тебя уже боятся.",
@@ -1180,6 +1901,10 @@
     let currentMonth = new Date().getMonth();
     let currentYear = new Date().getFullYear();
     let modalOpen = false;
+    let achievementAutoCloseTimer = null;
+    let currentActivityDate = null;
+    let currentActivityType = null;
+    let walkingViewMode = 'week';
 
     function init() {
         updateUI();
@@ -1192,6 +1917,7 @@
     function switchScreen(screen) {
         document.getElementById('homeScreen').style.display = 'none';
         document.getElementById('workoutScreen').style.display = 'none';
+        document.getElementById('walkingScreen').style.display = 'none';
         document.getElementById('calendarScreen').style.display = 'none';
         document.getElementById('weightScreen').style.display = 'none';
 
@@ -1200,6 +1926,10 @@
         if (screen === 'home') {
             document.getElementById('homeScreen').style.display = 'block';
             document.getElementById('navHome').classList.add('active');
+        } else if (screen === 'walking') {
+            document.getElementById('walkingScreen').style.display = 'block';
+            document.getElementById('navWalking').classList.add('active');
+            updateWalkingStats();
         } else if (screen === 'workout') {
             document.getElementById('workoutScreen').style.display = 'block';
             document.getElementById('navWorkout').classList.add('active');
@@ -1223,7 +1953,7 @@
             reader.onload = function(e) {
                 const profileBox = document.getElementById('profileBox');
                 profileBox.innerHTML = `<img src="${e.target.result}" alt="Profile">
-                    <button class="profile-upload" onclick="removeProfile()" title="Удалить фото">✕</button>`;
+                    <button class="profile-upload dimmed" onclick="removeProfile()" title="Удалить фото">✕</button>`;
                 localStorage.setItem('profileImage', e.target.result);
             };
             reader.readAsDataURL(file);
@@ -1259,7 +1989,7 @@
                 const completed = localStorage.getItem(id) ? 'completed' : '';
                 container.innerHTML += `
                     <div class="cardio-block ${completed}" id="${id}">
-                        <div style="font-weight:700; font-size:17px;">🏃‍♂️ ${group.name}: ${group.time}</div>
+                        <div style="font-weight:800; font-size:17px; letter-spacing: 0.5px;">🏃‍♂️ ${group.name}: ${group.time}</div>
                         <button class="btn-done" style="width: auto; padding: 10px 30px;" onclick="mark('${id}')">Готово</button>
                     </div>`;
             } else {
@@ -1324,7 +2054,6 @@
         } else {
             localStorage.setItem(warmupId, 'true');
             warmupBlock.classList.add('completed');
-            recordWorkout();
         }
         updateProgress();
     }
@@ -1342,7 +2071,6 @@
             localStorage.setItem(id, 'true');
             if (content) content.classList.remove('show');
             if (toggle) toggle.classList.remove('open');
-            recordWorkout();
         }
         updateProgress();
     }
@@ -1355,7 +2083,10 @@
         document.getElementById('p-bar').style.width = percent + '%';
         document.getElementById('progress-text').innerText = 'Прогресс: ' + percent + '%';
 
-        if (percent === 100) showCelebration();
+        if (percent === 100) {
+            showCelebration();
+            showSaveWorkoutPrompt();
+        }
         updateDayButtons();
     }
 
@@ -1367,16 +2098,43 @@
         updateUI();
     }
 
+    function closeSaveWorkoutPopup() {
+        document.getElementById('saveWorkoutPopupOverlay').classList.remove('show');
+        saveWorkoutRequested = false;
+    }
+
+    function confirmSaveWorkout() {
+        const today = new Date().toISOString().split('T')[0];
+        const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
+        workouts[today] = true;
+        localStorage.setItem('workouts', JSON.stringify(workouts));
+        closeSaveWorkoutPopup();
+        updateUI();
+    }
+
+    function showSaveWorkoutPrompt() {
+        if (saveWorkoutRequested) return;
+        saveWorkoutRequested = true;
+        document.getElementById('saveWorkoutPopupOverlay').classList.add('show');
+    }
+
     function resetProgress() {
-        if (confirm("Очистить прогресс и начать новую тренировку?")) {
-            const day = currentDay;
-            Object.keys(localStorage).forEach(key => {
-                if (key.includes(`d${day}-`)) localStorage.removeItem(key);
-            });
-            localStorage.removeItem(`warmup-d${day}`);
-            loadDay(day);
-            updateDayButtons();
-        }
+        document.getElementById('resetPopupOverlay').classList.add('show');
+    }
+
+    function closeResetPopup() {
+        document.getElementById('resetPopupOverlay').classList.remove('show');
+    }
+
+    function confirmResetProgress() {
+        const day = currentDay;
+        Object.keys(localStorage).forEach(key => {
+            if (key.includes(`d${day}-`)) localStorage.removeItem(key);
+        });
+        localStorage.removeItem(`warmup-d${day}`);
+        closeResetPopup();
+        loadDay(day);
+        updateDayButtons();
     }
 
     function getDayProgress(day) {
@@ -1404,18 +2162,21 @@
             const btn = document.getElementById(`b${d}`);
             const pct = getDayProgress(d);
             if (pct === 100) {
-                btn.style.background = 'var(--accent-green)';
+                btn.style.background = 'linear-gradient(135deg, rgba(52, 199, 89, 0.95) 0%, rgba(52, 199, 89, 0.25) 100%)';
                 btn.style.color = 'white';
-                btn.style.boxShadow = '0 4px 12px rgba(52,199,89,0.4)';
+                btn.style.boxShadow = '0 0 20px rgba(52, 199, 89, 0.35)';
+                btn.style.borderColor = 'rgba(52, 199, 89, 0.75)';
             } else {
                 if (d === currentDay) {
-                    btn.style.background = 'var(--button-brown)';
+                    btn.style.background = 'linear-gradient(135deg, #ff1f71, #ffcc00)';
                     btn.style.color = 'white';
-                    btn.style.boxShadow = '0 4px 12px rgba(184,149,106,0.4)';
+                    btn.style.boxShadow = '0 0 20px rgba(255, 31, 113, 0.5)';
+                    btn.style.borderColor = 'rgba(255, 255, 255, 0.5)';
                 } else {
-                    btn.style.background = 'var(--card-bg)';
-                    btn.style.color = 'var(--button-brown)';
-                    btn.style.boxShadow = '0 2px 6px rgba(0,0,0,0.08)';
+                    btn.style.background = 'rgba(255, 255, 255, 0.08)';
+                    btn.style.color = 'white';
+                    btn.style.boxShadow = 'none';
+                    btn.style.borderColor = 'rgba(255, 255, 255, 0.3)';
                 }
                 allComplete = false;
             }
@@ -1450,7 +2211,6 @@
         checkAchievements(totalCount);
     }
 
-    // ===== ACHIEVEMENT MODAL =====
     function openAchievementModal(target) {
         const a = achievements.find(a => parseInt(a.label) === target);
         if (!a) return;
@@ -1477,20 +2237,17 @@
     }
 
     function handleModalOverlayClick(e) {
-        // Close if clicking on backdrop or the overlay itself (not the card)
         if (e.target === document.getElementById('achievementModal') ||
             e.target === document.querySelector('.achievement-modal-backdrop')) {
             closeAchievementModal();
         }
     }
 
-    // Also close on card click (tap on card itself closes it)
     document.getElementById('achievementModalCard').addEventListener('click', function(e) {
         e.stopPropagation();
         closeAchievementModal();
     });
 
-    // CALENDAR
     function renderCalendar() {
         const firstDay = new Date(currentYear, currentMonth, 1);
         const lastDay = new Date(currentYear, currentMonth + 1, 0);
@@ -1504,63 +2261,164 @@
         for (let i = 0; i < startDay; i++) html += `<div class="day other-month"></div>`;
 
         const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
+        const walkingData = JSON.parse(localStorage.getItem('walkingData') || '{}');
         const today = new Date().toISOString().split('T')[0];
 
         for (let day = 1; day <= daysInMonth; day++) {
             const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const isCompleted = workouts[dateStr];
+            const hasWorkout = !!workouts[dateStr];
+            const hasWalking = walkingData[dateStr] !== undefined && walkingData[dateStr] !== null;
             const isToday = dateStr === today;
-            html += `<div class="day ${isCompleted ? 'completed' : ''} ${isToday ? 'today' : ''}" onclick="calDayClick('${dateStr}')">${day}</div>`;
+
+            let styleAttr = '';
+            let extraClass = '';
+            if (hasWorkout && hasWalking) {
+                styleAttr = `style="background: linear-gradient(135deg, rgba(93,216,93,0.7) 50%, rgba(0,168,255,0.7) 50%); border-color: rgba(255,255,255,0.6); box-shadow: 0 0 18px rgba(93,216,93,0.3);"`;
+            } else if (hasWorkout) {
+                extraClass = 'completed';
+            } else if (hasWalking) {
+                styleAttr = `style="background: rgba(0,168,255,0.35); border-color: rgba(0,168,255,0.75); box-shadow: 0 0 18px rgba(0,168,255,0.3); color: white;"`;
+            }
+
+            html += `<div class="day ${extraClass} ${isToday ? 'today' : ''}" ${styleAttr} onclick="calDayClick('${dateStr}')">${day}</div>`;
         }
 
         document.getElementById('calendarDays').innerHTML = html;
     }
 
     function calDayClick(dateStr) {
+        const walkingData = JSON.parse(localStorage.getItem('walkingData') || '{}');
         const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
-        const isCompleted = workouts[dateStr];
+        const hasWorkout = !!workouts[dateStr];
+        const hasWalking = walkingData[dateStr] !== undefined && walkingData[dateStr] !== null;
 
+        currentActivityDate = dateStr;
+
+        const overlay = document.getElementById('walkingChoicePopupOverlay');
+        const btns = document.getElementById('walkingChoiceBtns');
+        const titleEl = overlay.querySelector('.walking-choice-popup-title');
         const [y, m, d] = dateStr.split('-');
-        const prettyDate = new Date(y, m - 1, d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+        const prettyDate = new Date(y, m - 1, d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+        if (titleEl) titleEl.innerText = prettyDate;
 
-        const overlay = document.getElementById('calPopupOverlay');
-        const icon = document.getElementById('calPopupIcon');
-        const title = document.getElementById('calPopupTitle');
-        const dateEl = document.getElementById('calPopupDate');
-        const btns = document.getElementById('calPopupBtns');
-
-        if (isCompleted) {
-            icon.innerText = '🗑️';
-            title.innerText = 'Удалить тренировку?';
-            dateEl.innerText = prettyDate;
-            btns.innerHTML = `
-                <button class="cal-popup-btn delete" onclick="calConfirmDelete('${dateStr}')">Удалить</button>
-                <button class="cal-popup-btn cancel" onclick="calClosePopup()">Назад</button>`;
-        } else {
-            icon.innerText = '💪';
-            title.innerText = 'Записать тренировку?';
-            dateEl.innerText = prettyDate;
-            btns.innerHTML = `
-                <button class="cal-popup-btn confirm" onclick="calConfirmAdd('${dateStr}')">Подтвердить</button>
-                <button class="cal-popup-btn cancel" onclick="calClosePopup()">Отмена</button>`;
-        }
-
+        let html = '';
+        if (!hasWorkout) html += `<button class="walking-choice-btn workout" onclick="chooseActivity('workout')">💪 Добавить тренировку</button>`;
+        if (!hasWalking) html += `<button class="walking-choice-btn walking" onclick="chooseActivity('walking')">🚶 Добавить ходьбу</button>`;
+        if (hasWorkout) html += `<button class="walking-choice-btn" style="background:rgba(255,59,48,0.3);color:#ff3b30;border:1.5px solid rgba(255,59,48,0.5);" onclick="deleteActivity('${dateStr}','workout')">🗑️ Удалить тренировку</button>`;
+        if (hasWalking) html += `<button class="walking-choice-btn" style="background:rgba(255,59,48,0.3);color:#ff3b30;border:1.5px solid rgba(255,59,48,0.5);" onclick="deleteActivity('${dateStr}','walking')">🗑️ Удалить ходьбу</button>`;
+        if (hasWorkout && hasWalking) html += `<button class="walking-choice-btn" style="background:rgba(255,59,48,0.3);color:#ff3b30;border:1.5px solid rgba(255,59,48,0.5);" onclick="deleteActivity('${dateStr}','both')">🗑️ Удалить всё</button>`;
+        html += `<button class="walking-choice-btn cancel" onclick="closeWalkingChoice()">Отмена</button>`;
+        btns.innerHTML = html;
         overlay.classList.add('show');
     }
 
-    function calConfirmAdd(dateStr) {
+    function deleteActivity(dateStr, type) {
+        if (type === 'workout' || type === 'both') {
+            const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
+            delete workouts[dateStr];
+            localStorage.setItem('workouts', JSON.stringify(workouts));
+        }
+        if (type === 'walking' || type === 'both') {
+            const walkingData = JSON.parse(localStorage.getItem('walkingData') || '{}');
+            delete walkingData[dateStr];
+            localStorage.setItem('walkingData', JSON.stringify(walkingData));
+        }
+        closeWalkingChoice();
+        renderCalendar();
+        updateUI();
+    }
+
+    function showDeleteActivityPopup(dateStr, hasWorkout, hasWalking) {
+        calDayClick(dateStr);
+    }
+
+    function chooseActivity(type) {
+        currentActivityType = type;
+        if (type === 'walking') {
+            const btns = document.getElementById('walkingChoiceBtns');
+            btns.innerHTML = `
+                <div style="font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:6px;">Сколько километров прошла?</div>
+                <input type="number" id="walkingKmInput" placeholder="Введи км" step="0.1" min="0" style="display:block;width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:white;font-size:16px;margin-bottom:12px;font-family:'Exo 2';">
+                <button class="walking-choice-btn walking" onclick="confirmWalkingKm()">✅ Сохранить</button>
+                <button class="walking-choice-btn cancel" onclick="closeWalkingChoice()">Отмена</button>`;
+            setTimeout(() => {
+                const inp = document.getElementById('walkingKmInput');
+                if (inp) {
+                    inp.focus();
+                    inp.addEventListener('keypress', function(e) {
+                        if (e.key === 'Enter') confirmWalkingKm();
+                    });
+                }
+            }, 50);
+        } else {
+            addActivityToCalendar('workout', 0);
+        }
+    }
+
+    function confirmWalkingKm() {
+        const inp = document.getElementById('walkingKmInput');
+        const km = parseFloat(inp ? inp.value : 0) || 0;
+        addActivityToCalendar('walking', km);
+    }
+
+    function closeWalkingChoice() {
+        document.getElementById('walkingChoicePopupOverlay').classList.remove('show');
+        // Restore default buttons
+        document.getElementById('walkingChoiceBtns').innerHTML = `
+            <button class="walking-choice-btn workout" onclick="chooseActivity('workout')">💪 Тренировку</button>
+            <button class="walking-choice-btn walking" onclick="chooseActivity('walking')">🚶 Спортивную ходьбу</button>
+            <button class="walking-choice-btn cancel" onclick="closeWalkingChoice()">Отмена</button>`;
+        currentActivityDate = null;
+        currentActivityType = null;
+    }
+
+    function addActivityToCalendar(type, km = 0) {
+        if (!currentActivityDate) return;
+
+        if (type === 'workout') {
+            const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
+            workouts[currentActivityDate] = true;
+            localStorage.setItem('workouts', JSON.stringify(workouts));
+        } else if (type === 'walking') {
+            const walkingData = JSON.parse(localStorage.getItem('walkingData') || '{}');
+            walkingData[currentActivityDate] = km;
+            localStorage.setItem('walkingData', JSON.stringify(walkingData));
+        }
+
+        closeWalkingChoice();
+        renderCalendar();
+        updateUI();
+    }
+
+    // Walking km input keypress handled in chooseActivity()
+
+    function calConfirmDelete(dateStr) {
         const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
-        workouts[dateStr] = true;
+        delete workouts[dateStr];
+        localStorage.setItem('workouts', JSON.stringify(workouts));
+
+        const walkingData = JSON.parse(localStorage.getItem('walkingData') || '{}');
+        delete walkingData[dateStr];
+        localStorage.setItem('walkingData', JSON.stringify(walkingData));
+
+        calClosePopup();
+        renderCalendar();
+        updateUI();
+    }
+
+    function calConfirmDeleteWorkout(dateStr) {
+        const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
+        delete workouts[dateStr];
         localStorage.setItem('workouts', JSON.stringify(workouts));
         calClosePopup();
         renderCalendar();
         updateUI();
     }
 
-    function calConfirmDelete(dateStr) {
-        const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
-        delete workouts[dateStr];
-        localStorage.setItem('workouts', JSON.stringify(workouts));
+    function calConfirmDeleteWalking(dateStr) {
+        const walkingData = JSON.parse(localStorage.getItem('walkingData') || '{}');
+        delete walkingData[dateStr];
+        localStorage.setItem('walkingData', JSON.stringify(walkingData));
         calClosePopup();
         renderCalendar();
         updateUI();
@@ -1572,6 +2430,22 @@
 
     document.getElementById('calPopupOverlay').addEventListener('click', function(e) {
         if (e.target === this) calClosePopup();
+    });
+
+    document.getElementById('resetPopupOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeResetPopup();
+    });
+
+    document.getElementById('editWeightPopupOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeEditWeightPopup();
+    });
+
+    document.getElementById('deleteWeightPopupOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeDeleteWeightPopup();
+    });
+
+    document.getElementById('saveWorkoutPopupOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeSaveWorkoutPopup();
     });
 
     function prevMonth() {
@@ -1586,7 +2460,6 @@
         renderCalendar();
     }
 
-    // WEIGHT
     function addWeight() {
         const input = document.getElementById('weightInput');
         const weight = parseFloat(input.value);
@@ -1610,7 +2483,7 @@
             if (i < weights.length - 1) {
                 const diff = w.weight - weights[i + 1].weight;
                 const sign = diff > 0 ? '+' : '';
-                const color = diff > 0 ? 'var(--accent-red)' : 'var(--accent-green)';
+                const color = diff > 0 ? '#ff3b30' : '#34c759';
                 change = `<div class="weight-change" style="color:${color};">${sign}${diff.toFixed(1)} кг</div>`;
             }
             html += `
@@ -1621,39 +2494,260 @@
                     </div>
                     <div style="display:flex;align-items:center;gap:10px;">
                         <div class="weight-value" id="wv-${i}">${w.weight} кг</div>
-                        <button onclick="editWeight(${i})" style="background:none;border:none;font-size:16px;cursor:pointer;padding:4px;" title="Редактировать">✏️</button>
-                        <button onclick="deleteWeight(${i})" style="background:none;border:none;font-size:16px;cursor:pointer;padding:4px;" title="Удалить">✕</button>
+                        <button onclick="editWeight(${i})" style="background:none;border:none;font-size:16px;cursor:pointer;padding:4px;color:#ffcc00;" title="Редактировать">✏️</button>
+                        <button onclick="deleteWeight(${i})" style="background:none;border:none;font-size:16px;cursor:pointer;padding:4px;color:#ff3b30;" title="Удалить">✕</button>
                     </div>
                 </div>`;
         }
 
-        document.getElementById('weightList').innerHTML = html || '<p style="text-align:center;color:#8e8e93;">Записей нет</p>';
+        document.getElementById('weightList').innerHTML = html || '<p style="text-align:center;color:rgba(255,255,255,0.6);">Записей нет</p>';
         drawWeightChart();
     }
 
     function deleteWeight(idx) {
-        if (!confirm('Удалить эту запись?')) return;
+        deletingWeightIdx = idx;
+        document.getElementById('deleteWeightPopupOverlay').classList.add('show');
+    }
+
+    function closeDeleteWeightPopup() {
+        document.getElementById('deleteWeightPopupOverlay').classList.remove('show');
+        deletingWeightIdx = null;
+    }
+
+    function confirmDeleteWeight() {
+        if (deletingWeightIdx === null) return;
         const weights = JSON.parse(localStorage.getItem('weights') || '[]');
-        weights.splice(idx, 1);
+        weights.splice(deletingWeightIdx, 1);
         localStorage.setItem('weights', JSON.stringify(weights));
+        closeDeleteWeightPopup();
         updateWeightUI();
         updateUI();
     }
 
     function editWeight(idx) {
+        editingWeightIdx = idx;
         const weights = JSON.parse(localStorage.getItem('weights') || '[]');
-        const current = weights[idx].weight;
-        const newVal = prompt('Введи новый вес (кг):', current);
-        if (newVal === null) return;
+        document.getElementById('editWeightInput').value = weights[idx].weight;
+        document.getElementById('editWeightPopupOverlay').classList.add('show');
+    }
+
+    function closeEditWeightPopup() {
+        document.getElementById('editWeightPopupOverlay').classList.remove('show');
+        editingWeightIdx = null;
+    }
+
+    function confirmEditWeight() {
+        if (editingWeightIdx === null) return;
+        const weights = JSON.parse(localStorage.getItem('weights') || '[]');
+        const newVal = document.getElementById('editWeightInput').value;
         const parsed = parseFloat(newVal);
-        if (!parsed || parsed <= 0) { alert('Некорректный вес'); return; }
-        weights[idx].weight = parsed;
+        if (!parsed || parsed <= 0) {
+            alert('Некорректный вес');
+            return;
+        }
+        weights[editingWeightIdx].weight = parsed;
         localStorage.setItem('weights', JSON.stringify(weights));
+        closeEditWeightPopup();
         updateWeightUI();
         updateUI();
     }
 
     function setupWeightChart() { /* init in drawWeightChart */ }
+
+    function switchWalkingView(mode) {
+        walkingViewMode = mode;
+        document.getElementById('weekBtn').classList.toggle('active', mode === 'week');
+        document.getElementById('monthBtn').classList.toggle('active', mode === 'month');
+        updateWalkingStats();
+    }
+
+    function updateWalkingStats() {
+        const walkingData = JSON.parse(localStorage.getItem('walkingData') || '{}');
+        const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
+
+        // --- Week totals (current 7 days Mon–Sun of this week) ---
+        const dayOfWeek = today.getDay() === 0 ? 6 : today.getDay() - 1; // Mon=0
+        const weekStart = new Date(today);
+        weekStart.setDate(today.getDate() - dayOfWeek);
+        let weekKm = 0;
+        for (let i = 0; i < 7; i++) {
+            const d = new Date(weekStart);
+            d.setDate(weekStart.getDate() + i);
+            const key = d.toISOString().split('T')[0];
+            if (walkingData[key]) weekKm += parseFloat(walkingData[key]) || 0;
+        }
+        const weekSteps = Math.round((weekKm * 1000) / 0.75);
+        document.getElementById('weekKm').innerText = weekKm.toFixed(1) + ' км';
+        document.getElementById('weekSteps').innerText = weekSteps.toLocaleString('ru-RU') + ' шагов';
+
+        // --- Month totals ---
+        const y = today.getFullYear(), m = today.getMonth();
+        let monthKm = 0;
+        Object.keys(walkingData).forEach(key => {
+            const d = new Date(key);
+            if (d.getFullYear() === y && d.getMonth() === m) {
+                monthKm += parseFloat(walkingData[key]) || 0;
+            }
+        });
+        const monthSteps = Math.round((monthKm * 1000) / 0.75);
+        document.getElementById('monthKm').innerText = monthKm.toFixed(1) + ' км';
+        document.getElementById('monthSteps').innerText = monthSteps.toLocaleString('ru-RU') + ' шагов';
+
+        drawWalkingChart(walkingData, today);
+    }
+
+    function drawWalkingChart(walkingData, today) {
+        const wrapper = document.getElementById('walkingChartWrapper');
+        const canvas = document.getElementById('walkingChart');
+        if (!canvas || !wrapper) return;
+
+        const isWeek = walkingViewMode === 'week';
+        const BAR_W = 36, BAR_GAP = 14, LABEL_H = 36, TOP_PAD = 50, LEFT_PAD = 10, RIGHT_PAD = 10;
+
+        // Build date range
+        let dates = [];
+        const todayObj = new Date(today);
+        const y = todayObj.getFullYear(), m = todayObj.getMonth();
+
+        if (isWeek) {
+            // All days of current month (for scrollable week view)
+            const daysInMonth = new Date(y, m + 1, 0).getDate();
+            for (let d = 1; d <= daysInMonth; d++) {
+                const key = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                dates.push(key);
+            }
+        } else {
+            // All days of current month
+            const daysInMonth = new Date(y, m + 1, 0).getDate();
+            for (let d = 1; d <= daysInMonth; d++) {
+                const key = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                dates.push(key);
+            }
+        }
+
+        const values = dates.map(k => parseFloat(walkingData[k]) || 0);
+        const maxVal = Math.max(...values, 1);
+
+        const totalW = LEFT_PAD + dates.length * (BAR_W + BAR_GAP) + RIGHT_PAD;
+        const chartH = 300;
+        const barAreaH = chartH - LABEL_H - TOP_PAD;
+
+        canvas.width = totalW;
+        canvas.height = chartH;
+        canvas.style.width = totalW + 'px';
+        canvas.style.height = chartH + 'px';
+
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, totalW, chartH);
+
+        const todayStr = todayObj.toISOString().split('T')[0];
+
+        // Remove old tooltip
+        const oldTip = wrapper.querySelector('.walking-tooltip');
+        if (oldTip) oldTip.remove();
+
+        // Draw grid lines
+        ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= 4; i++) {
+            const gy = TOP_PAD + (barAreaH / 4) * i;
+            ctx.beginPath(); ctx.moveTo(LEFT_PAD, gy); ctx.lineTo(totalW - RIGHT_PAD, gy); ctx.stroke();
+            const val = maxVal - (maxVal / 4) * i;
+            ctx.fillStyle = 'rgba(255,255,255,0.4)';
+            ctx.font = '10px Exo 2';
+            ctx.fillText(val.toFixed(1), 2, gy + 4);
+        }
+
+        dates.forEach((dateKey, i) => {
+            const km = values[i];
+            const barH = km > 0 ? Math.max(4, (km / maxVal) * barAreaH) : 0;
+            const x = LEFT_PAD + i * (BAR_W + BAR_GAP);
+            const barY = TOP_PAD + barAreaH - barH;
+            const isToday = dateKey === todayStr;
+
+            // Bar
+            if (km > 0) {
+                const grad = ctx.createLinearGradient(x, barY, x, barY + barH);
+                grad.addColorStop(0, '#00d4ff');
+                grad.addColorStop(1, '#0066cc');
+                ctx.fillStyle = grad;
+            } else {
+                ctx.fillStyle = isToday ? 'rgba(255,204,0,0.2)' : 'rgba(255,255,255,0.08)';
+            }
+            ctx.beginPath();
+            ctx.roundRect(x, barY, BAR_W, barH || 4, [4, 4, 0, 0]);
+            ctx.fill();
+
+            // Today highlight ring
+            if (isToday) {
+                ctx.strokeStyle = '#ffcc00';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(x - 2, TOP_PAD, BAR_W + 4, barAreaH);
+            }
+
+            // Label (day number)
+            const d = new Date(dateKey);
+            ctx.fillStyle = isToday ? '#ffcc00' : 'rgba(255,255,255,0.6)';
+            ctx.font = isToday ? 'bold 11px Exo 2' : '10px Exo 2';
+            ctx.textAlign = 'center';
+            ctx.fillText(d.getDate(), x + BAR_W / 2, chartH - 8);
+
+            // km label above bar
+            if (km > 0) {
+                ctx.fillStyle = '#00d4ff';
+                ctx.font = 'bold 10px Exo 2';
+                ctx.textAlign = 'center';
+                ctx.fillText(km.toFixed(1), x + BAR_W / 2, barY - 4);
+            }
+        });
+
+        // Tap on bar → show tooltip
+        const handleTap = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const tapX = (clientX - rect.left) * scaleX;
+
+            dates.forEach((dateKey, i) => {
+                const x = LEFT_PAD + i * (BAR_W + BAR_GAP);
+                if (tapX >= x && tapX <= x + BAR_W) {
+                    const km = values[i];
+                    const steps = Math.round((km * 1000) / 0.75);
+                    const d = new Date(dateKey);
+                    const label = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+                    showWalkingTooltip(wrapper, x / scaleX + BAR_W / 2 / scaleX, rect.top - wrapper.getBoundingClientRect().top + 10, label, km, steps);
+                }
+            });
+        };
+
+        canvas.onclick = handleTap;
+        canvas.ontouchstart = handleTap;
+
+        // Auto-scroll to today in week mode
+        if (isWeek) {
+            const todayIdx = dates.indexOf(todayStr);
+            if (todayIdx >= 0) {
+                const scrollTo = LEFT_PAD + todayIdx * (BAR_W + BAR_GAP) - wrapper.clientWidth / 2 + BAR_W / 2;
+                wrapper.scrollLeft = Math.max(0, scrollTo);
+            }
+        } else {
+            wrapper.scrollLeft = 0;
+        }
+    }
+
+    function showWalkingTooltip(wrapper, x, y, label, km, steps) {
+        const old = wrapper.querySelector('.walking-tooltip');
+        if (old) old.remove();
+
+        const tip = document.createElement('div');
+        tip.className = 'walking-tooltip';
+        tip.style.cssText = `position:absolute;left:${Math.max(0, x - 55)}px;top:${y}px;background:rgba(15,5,36,0.95);border:1.5px solid rgba(0,168,255,0.6);border-radius:12px;padding:8px 12px;font-family:'Exo 2',sans-serif;font-size:12px;color:white;z-index:100;pointer-events:none;min-width:110px;text-align:center;backdrop-filter:blur(10px);`;
+        tip.innerHTML = `<div style="color:#ffcc00;font-weight:800;margin-bottom:4px;">${label}</div><div style="color:#00d4ff;">🚶 ${km.toFixed(2)} км</div><div style="color:rgba(255,255,255,0.7);margin-top:2px;">👟 ${steps.toLocaleString('ru-RU')} шагов</div>`;
+        wrapper.style.position = 'relative';
+        wrapper.appendChild(tip);
+        setTimeout(() => { if (tip.parentNode) tip.remove(); }, 3000);
+    }
 
     function drawWeightChart() {
         const canvas = document.getElementById('weightChart');
@@ -1663,8 +2757,8 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         if (weights.length === 0) {
-            ctx.fillStyle = '#A0A0A0';
-            ctx.font = '14px system-ui';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.font = '14px Exo 2';
             ctx.fillText('Нет данных для графика', 50, 100);
             return;
         }
@@ -1677,15 +2771,15 @@
         const maxWeight = Math.max(...values) + 1;
         const range = maxWeight - minWeight;
 
-        ctx.strokeStyle = '#E8D4C4';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
         ctx.lineWidth = 1;
         for (let i = 0; i <= 4; i++) {
             const y = padding + (height / 4) * i;
             ctx.beginPath(); ctx.moveTo(padding, y); ctx.lineTo(canvas.width - padding, y); ctx.stroke();
         }
 
-        ctx.strokeStyle = '#B8956A';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#ffcc00';
+        ctx.lineWidth = 2.5;
         ctx.beginPath();
         values.forEach((v, i) => {
             const x = padding + (width / (values.length - 1 || 1)) * i;
@@ -1694,24 +2788,25 @@
         });
         ctx.stroke();
 
-        ctx.fillStyle = '#B8956A';
+        ctx.fillStyle = '#ffcc00';
         values.forEach((v, i) => {
             const x = padding + (width / (values.length - 1 || 1)) * i;
             const y = padding + height - ((v - minWeight) / range) * height;
-            ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill();
         });
 
-        ctx.strokeStyle = '#666'; ctx.lineWidth = 1;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(padding, padding); ctx.lineTo(padding, canvas.height - padding);
         ctx.lineTo(canvas.width - padding, canvas.height - padding);
         ctx.stroke();
     }
 
-    // ACHIEVEMENTS
     function renderAchievements() {
         const workouts = JSON.parse(localStorage.getItem('workouts') || '{}');
         const count = Object.keys(workouts).length;
+        const checkedAchievements = JSON.parse(localStorage.getItem('checkedAchievementsV2') || '[]');
 
         const html = achievements.map(a => {
             const target = parseInt(a.label);
@@ -1732,38 +2827,68 @@
 
     function checkAchievements(count) {
         const targets = Array.from({length: 20}, (_, i) => (i + 1) * 5);
-        const checkedAchievements = JSON.parse(localStorage.getItem('checkedAchievements') || '[]');
+        const lastCountRaw = localStorage.getItem('lastWorkoutCount');
+        // Не показываем награду на первом старте страницы (чтобы не "дёргать" пользователя).
+        if (lastCountRaw === null) {
+            localStorage.setItem('lastWorkoutCount', String(count));
+            renderAchievements();
+            return;
+        }
 
+        const lastCount = parseInt(lastCountRaw, 10) || 0;
+        let achievementToShow = null;
+
+        // ТЗ: показываем в момент достижения рубежа.
+        // Поэтому реагируем на переход: было меньше target -> стало target или больше.
         for (let target of targets) {
-            if (count === target && !checkedAchievements.includes(target)) {
-                showUnlockNotification(target);
-                checkedAchievements.push(target);
-                localStorage.setItem('checkedAchievements', JSON.stringify(checkedAchievements));
+            if (lastCount < target && count >= target) {
+                achievementToShow = target;
+                break;
             }
         }
+
+        localStorage.setItem('lastWorkoutCount', String(count));
+        if (achievementToShow !== null) triggerAchievement(achievementToShow);
         renderAchievements();
     }
 
     function showUnlockNotification(target) {
         const notification = document.getElementById('unlockNotification');
-        document.getElementById('notificationIcon').innerText = '🏆';
-        document.getElementById('notificationText').innerText = 'Награда разблокирована!';
-        document.getElementById('notificationSubtext').innerText = target + ' тренировок';
-        notification.classList.remove('hide');
-        setTimeout(() => notification.classList.add('hide'), 3000);
+        const icon = document.getElementById('notificationIcon');
+        const text = document.getElementById('notificationText');
+        const subtext = document.getElementById('notificationSubtext');
+        if (!notification || !icon || !text || !subtext) return;
+        icon.innerText = '🏆';
+        text.innerText = 'Награда разблокирована!';
+        subtext.innerText = target + ' тренировок';
+        // notification.classList.remove('hide');
+        // setTimeout(() => notification.classList.add('hide'), 3000);
     }
 
-    // FIREWORKS CELEBRATION
-    function showCelebration() {
+    // ТЗ: в момент достижения рубежа показываем карточку награды по центру на 4 сек
+    // и на фоне запускаем фейерверк.
+    function triggerAchievement(target) {
+        if (achievementAutoCloseTimer) clearTimeout(achievementAutoCloseTimer);
+        // ТЗ: заголовок "ЛЕРА..." и фейерверк должны быть фоном под карточкой
+        showCelebration(undefined, 4000);
+        openAchievementModal(target);
+        achievementAutoCloseTimer = setTimeout(() => {
+            closeAchievementModal();
+        }, 4000);
+    }
+
+    function showCelebration(message = '🎉 ЛЕРА, ТЫ ЭТО СДЕЛАЛА! 🎉', durationMs = 3000) {
         const overlay = document.getElementById('celebrationOverlay');
         const canvas = document.getElementById('fireworksCanvas');
         overlay.classList.add('show');
+        const textEl = document.getElementById('celebrationText') || document.querySelector('.celebration-text');
+        if (textEl) textEl.innerText = message;
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         const ctx = canvas.getContext('2d');
 
-        const colors = ['#FFD700','#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD','#98D8C8'];
+        const colors = ['#ffcc00','#ff1f71','#7000ff','#4800ff','#00ff88','#00ffff'];
         const particles = [];
 
         function createBurst(x, y) {
@@ -1826,17 +2951,18 @@
             overlay.classList.remove('show');
             cancelAnimationFrame(animId);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }, 3000);
+        }, durationMs);
     }
 
     window.addEventListener('load', () => {
         const profileImage = localStorage.getItem('profileImage');
         if (profileImage) {
             document.getElementById('profileBox').innerHTML = `<img src="${profileImage}" alt="Profile">
-                <button class="profile-upload" onclick="removeProfile()" title="Удалить фото">✕</button>`;
+                <button class="profile-upload dimmed" onclick="removeProfile()" title="Удалить фото">✕</button>`;
         }
         init();
     });
 </script>
+
 </body>
 </html>
